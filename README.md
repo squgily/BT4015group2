@@ -29,6 +29,8 @@ python scripts/join_hdb_nationwide.py
 | `output/hdb_join_review.csv` | the 156 unmatched blocks (mostly road codes newer than the 2019 LTA table) |
 | `data/ChildCareServices_2021.geojson` | Child Care Services, data.gov.sg `d_5d668e3f544335f8028f546827b773b4`, version 2026-04-18 | 
 | `data/MasterPlanSubZones_2019.geojson` | Master Plan 2019 Subzone Boundary (No Sea) (GEOJSON), data.gov.sg `d_8594ae9ff96d0c708bc2af633048edfb`, version 2025-12-03 | 
+| `large_data/singapore_only.osm.pbf` | OSRM Network Street Data, https://download.geofabrik.de/asia/malaysia-singapore-brunei.html | 
+| `large_data/Singapore.poly` | Singapore Polygon, https://download.geofabrik.de/asia/malaysia-singapore-brunei.html |
 
 
 Use `is_residential` to drop carparks / markets / pavilions before computing demand.
