@@ -27,6 +27,9 @@ python scripts/join_hdb_nationwide.py
 | `data/LTARoadNameCode_2019.xlsx` | LTA DataMall road-code → road-name lookup (sheet `GISDomainData`) |
 | `output/hdb_blocks.gpkg` | layer `hdb_blocks`, EPSG:3414, all blocks with attributes + `footprint_m2`, `gfa_m2`, `is_residential`, `match_status` |
 | `output/hdb_join_review.csv` | the 156 unmatched blocks (mostly road codes newer than the 2019 LTA table) |
+| `data/ChildCareServices_2021.geojson` | Child Care Services, data.gov.sg `d_5d668e3f544335f8028f546827b773b4`, version 2026-04-18 | 
+| `data/MasterPlanSubZones_2019.geojson` | Master Plan 2019 Subzone Boundary (No Sea) (GEOJSON), data.gov.sg `d_8594ae9ff96d0c708bc2af633048edfb`, version 2025-12-03 | 
+
 
 Use `is_residential` to drop carparks / markets / pavilions before computing demand.
 `gfa_m2` = footprint area × `max_floor_lvl` is the team's agreed weight for allocating
