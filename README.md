@@ -37,3 +37,28 @@ Use `is_residential` to drop carparks / markets / pavilions before computing dem
 `gfa_m2` = footprint area × `max_floor_lvl` is the team's agreed weight for allocating
 young-child population to blocks; `total_dwelling_units` is also available for a
 robustness check. Requires `geopandas`, `pyogrio`, `pandas`, `openpyxl`.
+
+## HDB neighbourhood clusters (preprocessing steps 2–4)
+
+Residential blocks are grouped into walkable neighbourhoods so that one walk time per cluster
+stands in for all its blocks. Method: complete-linkage agglomerative clustering with a **300 m
+maximum diameter**, run separately inside each subzone. See `docs/clustering_decision.md` for
+the options compared (DBSCAN vs complete linkage), the evidence, and why 300 m;
+`figures/clustering_comparison.png` shows the difference on Tampines East.
+
+```
+python scripts/load_subzones.py        # adds layer "subzones" to output/hdb_blocks.gpkg
+python scripts/cluster_hdb_blocks.py   # adds hdb_points, hdb_clusters, hdb_cluster_hulls
+python scripts/experiment_clustering.py  # optional: re-run the method comparison
+```
+
+| Layer in `output/hdb_blocks.gpkg` | What |
+|---|---|
+| `subzones` | MP2019 subzones, EPSG:3414, `SUBZONE_C/N`, `PLN_AREA_N`, `area_km2` |
+| `hdb_points` | 10,741 residential block centroids with subzone, `cluster_id`, flat counts, `gfa_m2` |
+| `hdb_clusters` | 1,400 cluster centroids (weighted by dwelling units): `n_blocks`, `dwelling_units`, `gfa_m2`, `diameter_m` |
+| `hdb_cluster_hulls` | convex hull per cluster, for maps and visual QA only |
+
+`dwelling_units` and `gfa_m2` are sums over the cluster's blocks; `diameter_m` is the largest
+block-to-block distance (always ≤ 300 m). All three layers carry `color_idx` (0–7, neighbouring
+clusters never share a value): in QGIS use Categorized symbology on `color_idx`.
