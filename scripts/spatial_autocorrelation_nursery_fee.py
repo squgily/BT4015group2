@@ -102,7 +102,7 @@ def load_geojson(path: Path) -> dict:
         return json.load(f)
 
 
-def prepare_subzones(subzones_geojson: dict) -> list[dict]:
+def prepare_subzones(subzones_geojson: dict, name_field: str = "PLN_AREA_N") -> list[dict]:
     result = []
     for feature in subzones_geojson["features"]:
         coords = [
@@ -114,7 +114,7 @@ def prepare_subzones(subzones_geojson: dict) -> list[dict]:
         arr = np.asarray(coords, dtype=float)
         result.append(
             {
-                "planning_area": feature["properties"]["PLN_AREA_N"].strip(),
+                "planning_area": feature["properties"][name_field].strip(),
                 "geometry": feature["geometry"],
                 "bounds": (
                     float(arr[:, 0].min()),
@@ -293,17 +293,21 @@ def set_map_style(ax):
     ax.set_axis_off()
 
 
-def draw_fee_map(ax, subzones, area_df):
+def draw_fee_map(ax, subzones, area_df, spatial_unit_label="Planning Area"):
     lookup = dict(zip(area_df["planning_area"], area_df["mean_fee_sgd"]))
     patches, values = feature_patches(subzones, lookup)
-    collection = PatchCollection(patches, cmap="viridis", edgecolor="none", linewidth=0)
+    # Reverse viridis so higher (more expensive) fees use darker colours.
+    collection = PatchCollection(patches, cmap="viridis_r", edgecolor="none", linewidth=0)
     collection.set_antialiased(False)
     collection.set_array(np.ma.masked_invalid(values))
     ax.add_collection(collection)
     add_planning_area_boundaries(ax, subzones)
     ax.autoscale_view()
     set_map_style(ax)
-    ax.set_title("Mean Full-Day SC Nursery Fee by Planning Area", fontweight="bold")
+    ax.set_title(
+        f"Mean Full-Day SC Nursery Fee by {spatial_unit_label}",
+        fontweight="bold",
+    )
     cbar = ax.figure.colorbar(collection, ax=ax, fraction=0.032, pad=0.01)
     cbar.set_label("Mean monthly fee (SGD)")
     return collection
@@ -319,7 +323,7 @@ CLUSTER_COLORS = {
 }
 
 
-def draw_lisa_map(ax, subzones, area_df):
+def draw_lisa_map(ax, subzones, area_df, spatial_unit_label=None):
     lookup = dict(zip(area_df["planning_area"], area_df["lisa_cluster_p05"]))
     patches, clusters = feature_patches(subzones, lookup, missing="No data")
     colors = [CLUSTER_COLORS[c] for c in clusters]
@@ -329,7 +333,8 @@ def draw_lisa_map(ax, subzones, area_df):
     add_planning_area_boundaries(ax, subzones)
     ax.autoscale_view()
     set_map_style(ax)
-    ax.set_title("Local Moran (LISA) Clusters", fontweight="bold")
+    title_suffix = f" by {spatial_unit_label}" if spatial_unit_label else ""
+    ax.set_title(f"Local Moran (LISA) Clusters{title_suffix}", fontweight="bold")
     order = ["High-High", "Low-Low", "High-Low", "Low-High", "Not significant"]
     counts = area_df["lisa_cluster_p05"].value_counts().to_dict()
     ax.legend(
@@ -343,7 +348,9 @@ def draw_lisa_map(ax, subzones, area_df):
     )
 
 
-def draw_moran_scatter(ax, z, lag, observed_i, p_value, area_names):
+def draw_moran_scatter(
+    ax, z, lag, observed_i, p_value, area_names, annotate_names=True
+):
     colors = []
     for x, y in zip(z, lag):
         if x >= 0 and y >= 0:
@@ -386,6 +393,9 @@ def draw_moran_scatter(ax, z, lag, observed_i, p_value, area_names):
             color=CLUSTER_COLORS[label],
             bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.78, "pad": 2},
         )
+    if not annotate_names:
+        return
+
     # Tailored point offsets keep labels close to their markers while avoiding
     # the markers, nearby labels, and the Moran regression line.
     label_layout = {
@@ -401,6 +411,8 @@ def draw_moran_scatter(ax, z, lag, observed_i, p_value, area_names):
     }
     index_by_name = {name: i for i, name in enumerate(area_names)}
     for name, (text_offset, horizontal, vertical) in label_layout.items():
+        if name not in index_by_name:
+            continue
         i = index_by_name[name]
         ax.annotate(
             name.title(),
@@ -458,15 +470,42 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--centres", type=Path, default=Path("data/ChildCareServices_2021.geojson"))
     parser.add_argument("--subzones", type=Path, default=Path("data/MasterPlanSubZones_2019.geojson"))
-    parser.add_argument("--output-dir", type=Path, default=Path("output/spatial_autocorrelation_nursery_fee"))
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument(
+        "--spatial-unit",
+        choices=("planning_area", "subzone"),
+        default="planning_area",
+        help="Polygon level used to aggregate centre fees",
+    )
+    parser.add_argument(
+        "--skip-overview",
+        action="store_true",
+        help="Generate only the four standalone plots",
+    )
     parser.add_argument("--k", type=int, default=4, help="Number of nearest neighbours")
     parser.add_argument("--permutations", type=int, default=999)
     parser.add_argument("--seed", type=int, default=4015)
     args = parser.parse_args()
+
+    if args.spatial_unit == "subzone":
+        name_field = "SUBZONE_N"
+        unit_label = "Subzone"
+        unit_label_plural = "subzones"
+        unit_slug = "subzone"
+        default_output_dir = Path("output/spatial_autocorrelation_nursery_fee_subzone")
+    else:
+        name_field = "PLN_AREA_N"
+        unit_label = "Planning Area"
+        unit_label_plural = "planning areas"
+        unit_slug = "planning_area"
+        default_output_dir = Path("output/spatial_autocorrelation_nursery_fee")
+
+    if args.output_dir is None:
+        args.output_dir = default_output_dir
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     centres_json = load_geojson(args.centres)
-    subzones = prepare_subzones(load_geojson(args.subzones))
+    subzones = prepare_subzones(load_geojson(args.subzones), name_field=name_field)
     centre_df, diagnostics = assign_centres(centres_json, subzones)
     area_df = (
         centre_df.groupby("planning_area")["fee"]
@@ -505,9 +544,12 @@ def main():
     area_df["lisa_cluster_fdr05"] = np.where(local_q < 0.05, raw_clusters, "Not significant")
     area_df["neighbour_count"] = binary.sum(axis=1).astype(int)
     try:
-        area_df.to_csv(args.output_dir / "planning_area_nursery_fee_moran.csv", index=False)
+        area_df.rename(columns={"planning_area": unit_slug}).to_csv(
+            args.output_dir / f"{unit_slug}_nursery_fee_moran.csv",
+            index=False,
+        )
     except PermissionError:
-        print("Warning: planning-area CSV is open/locked; retained the existing copy.")
+        print(f"Warning: {unit_label.lower()} CSV is open/locked; retained the existing copy.")
     try:
         pd.DataFrame({"permutation": np.arange(1, args.permutations + 1), "moran_i": global_perm}).to_csv(
             args.output_dir / "global_moran_permutations.csv", index=False
@@ -515,47 +557,69 @@ def main():
     except PermissionError:
         print("Warning: permutation CSV is open/locked; retained the existing copy.")
 
-    save_individual_plot(lambda ax: draw_fee_map(ax, subzones, area_df), args.output_dir / "nursery_fee_choropleth.png")
-    save_individual_plot(lambda ax: draw_moran_scatter(ax, z, lag, observed_i, global_p, area_df["planning_area"].to_numpy()), args.output_dir / "global_moran_scatterplot.png")
-    save_individual_plot(lambda ax: draw_permutation(ax, global_perm, observed_i, expected_i, global_p), args.output_dir / "global_moran_permutation.png")
-    save_individual_plot(lambda ax: draw_lisa_map(ax, subzones, area_df), args.output_dir / "local_moran_lisa_map.png")
-
-    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-    draw_fee_map(axes[0, 0], subzones, area_df)
-    draw_moran_scatter(axes[0, 1], z, lag, observed_i, global_p, area_df["planning_area"].to_numpy())
-    draw_permutation(axes[1, 0], global_perm, observed_i, expected_i, global_p)
-    draw_lisa_map(axes[1, 1], subzones, area_df)
-    fig.suptitle(
-        "Spatial autocorrelation of FULL_DAY_SC_NURSERY_FEE",
-        fontsize=16,
-        fontweight="bold",
+    save_individual_plot(lambda ax: draw_fee_map(ax, subzones, area_df, unit_label), args.output_dir / "nursery_fee_choropleth.png")
+    save_individual_plot(
+        lambda ax: draw_moran_scatter(
+            ax,
+            z,
+            lag,
+            observed_i,
+            global_p,
+            area_df["planning_area"].to_numpy(),
+            annotate_names=args.spatial_unit == "planning_area",
+        ),
+        args.output_dir / "global_moran_scatterplot.png",
     )
-    fig.tight_layout(rect=(0, 0, 1, 0.97))
-    fig.savefig(args.output_dir / "spatial_autocorrelation_overview.png", dpi=220, bbox_inches="tight")
-    plt.close(fig)
+    save_individual_plot(lambda ax: draw_permutation(ax, global_perm, observed_i, expected_i, global_p), args.output_dir / "global_moran_permutation.png")
+    save_individual_plot(lambda ax: draw_lisa_map(ax, subzones, area_df, unit_label), args.output_dir / "local_moran_lisa_map.png")
+
+    if not args.skip_overview:
+        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+        draw_fee_map(axes[0, 0], subzones, area_df, unit_label)
+        draw_moran_scatter(
+            axes[0, 1],
+            z,
+            lag,
+            observed_i,
+            global_p,
+            area_df["planning_area"].to_numpy(),
+            annotate_names=args.spatial_unit == "planning_area",
+        )
+        draw_permutation(axes[1, 0], global_perm, observed_i, expected_i, global_p)
+        draw_lisa_map(axes[1, 1], subzones, area_df, unit_label)
+        fig.suptitle(
+            "Spatial autocorrelation of FULL_DAY_SC_NURSERY_FEE",
+            fontsize=16,
+            fontweight="bold",
+        )
+        fig.tight_layout(rect=(0, 0, 1, 0.97))
+        fig.savefig(args.output_dir / "spatial_autocorrelation_overview.png", dpi=220, bbox_inches="tight")
+        plt.close(fig)
 
     significant = area_df.loc[area_df["local_permutation_p"] < 0.05, [
         "planning_area", "mean_fee_sgd", "centre_count", "lisa_cluster_p05", "local_moran_i", "local_permutation_p", "local_fdr_q"
-    ]].sort_values(["lisa_cluster_p05", "local_permutation_p"])
+    ]].rename(columns={"planning_area": unit_slug}).sort_values(
+        ["lisa_cluster_p05", "local_permutation_p"]
+    )
     direction = "positive" if observed_i > expected_i else "negative"
     decision = "statistically significant" if global_p < 0.05 else "not statistically significant"
-    summary = f"""# Spatial autocorrelation of full-day SC nursery fees
+    summary = f"""# Spatial autocorrelation of full-day SC nursery fees by {unit_label.lower()}
 
 ## Method
 
 - Source points: `{args.centres.as_posix()}`; null/non-numeric `FULL_DAY_SC_NURSERY_FEE` records excluded.
-- Spatial unit: 2019 planning areas (`PLN_AREA_N`) from `{args.subzones.as_posix()}`.
+- Spatial unit: 2019 {unit_label_plural} (`{name_field}`) from `{args.subzones.as_posix()}`.
 - Area statistic: mean centre fee in SGD. The centre count and median are retained for context.
-- Spatial weights: symmetric {args.k}-nearest-neighbour graph based on area-weighted planning-area centroids, row-standardised.
+- Spatial weights: symmetric {args.k}-nearest-neighbour graph based on area-weighted {unit_label.lower()} centroids, row-standardised.
 - Inference: {args.permutations:,} random permutations, seed {args.seed}. Local p-values are exploratory; Benjamini-Hochberg FDR q-values are also reported.
 
 ## Data coverage
 
 - Centre features: {diagnostics['total_centres']:,}
 - Excluded null/invalid fees: {diagnostics['null_or_invalid_fee']:,}
-- Valid fee points outside a planning-area polygon: {diagnostics['outside_subzones']:,}
+- Valid fee points outside a {unit_label.lower()} polygon: {diagnostics['outside_subzones']:,}
 - Centres analysed: {len(centre_df):,}
-- Planning areas with at least one valid centre: {len(area_df)}
+- {unit_label_plural.capitalize()} with at least one valid centre: {len(area_df)}
 
 ## Global Moran's I
 
@@ -567,9 +631,9 @@ The area-level mean fees show **{direction} spatial autocorrelation**, and the r
 
 ## Local Moran clusters (raw permutation p < 0.05)
 
-{dataframe_to_markdown(significant) if len(significant) else 'No planning area is locally significant at raw p < 0.05.'}
+{dataframe_to_markdown(significant) if len(significant) else f'No {unit_label.lower()} is locally significant at raw p < 0.05.'}
 
-Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05` when confirmatory control of false discoveries is required. Results describe planning-area means, not individual-centre fee similarity.
+Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05` when confirmatory control of false discoveries is required. Results describe {unit_label.lower()} means, not individual-centre fee similarity.
 """
     (args.output_dir / "analysis_summary.md").write_text(summary, encoding="utf-8")
     print(summary)
