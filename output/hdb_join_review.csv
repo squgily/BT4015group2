@@ -1,157 +1,121 @@
-BLK_NO,ST_COD,POSTAL_COD,decoded_street,norm_street,reason
-63,PAA07B,519725,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-57,PAA07B,519722,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-114,PAR09C,519115,PASIR RIS ROAD,PASIR RIS RD,no_match_in_property_info
-40,PAH04B,519247,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-4,PAH04B,519211,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-57,PAH04B,519264,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-59,PAH04B,519266,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-44,PAA07B,519711,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-73,PAT06T,518717,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-118,PAR09C,519117,PASIR RIS ROAD,PASIR RIS RD,no_match_in_property_info
-181,HOS22Q,530181,,,undecoded_road_code
-181A,HOS22Q,531181,,,undecoded_road_code
-182,HOS22Q,530182,,,undecoded_road_code
-181B,HOS22Q,532181,,,undecoded_road_code
-44,PAT06T,518688,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-37,PAT06T,518681,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-23,PAH04B,519230,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-54,PAT06T,518698,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-29,PAT06T,518673,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-75,PAT06T,518719,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-35,PAH04B,519242,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-52,PAA07B,519736,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-12,TAS03D,162012,TAMAN HO SWEE,TMN HO SWEE,no_match_in_property_info
-54,PAH04B,519261,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-32,PAH04B,519239,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-84,PAT06T,518727,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-23,PAT06T,518667,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-47,PAH04B,519254,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-22,PAH04B,519229,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-88,PAT06T,518729,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-62,PAT06T,518706,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-64,PAT06T,518708,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-31,PAH04B,519238,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-987B,BUG06A,532987,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-15,PAH04B,519222,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-42,PAA07B,519709,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-43,PAH04B,519250,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-82,PAT06T,518726,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-63,PAT06T,518707,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-49,PAT06T,518693,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-581,BUG06A,530581,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-46,PAH04B,519253,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-54,PAA07B,519719,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-29,PAH04B,519236,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-12,PAH04B,519219,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-50,PAT06T,518694,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-120,PAR09C,519118,PASIR RIS ROAD,PASIR RIS RD,no_match_in_property_info
-11,PAH04B,519218,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-70,PAT06T,518714,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-16,PAH04B,519223,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-53,PAH04B,519260,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-37,PAH04B,519244,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-14,PAH04B,519221,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-40,PAA07B,519707,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-21,PAT06T,518665,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-61,PAH04B,519268,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-52,PAT06T,518696,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-56,PAA07B,519721,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-50,PAH04B,519257,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-582,BUG06A,530582,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-61,PAT06T,518705,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-48,PAH04B,519255,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-72,PAH04B,519279,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-988,BUG06A,530988,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-53,PAT06T,518697,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-987A,BUG06A,531987,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-36,PAH04B,519243,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-53,PAA07B,519718,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-56,PAH04B,519263,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-114A,PAR09C,519153,PASIR RIS ROAD,PASIR RIS RD,no_match_in_property_info
-18,TAS03D,162018,TAMAN HO SWEE,TMN HO SWEE,no_match_in_property_info
-67,PAH04B,519274,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-72,PAT06T,518716,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-116,PAR09C,519116,PASIR RIS ROAD,PASIR RIS RD,no_match_in_property_info
-16,TAS03D,163016,TAMAN HO SWEE,TMN HO SWEE,no_match_in_property_info
-45,PAA07B,519712,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-41,PAT06T,518685,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-1,WOE03C,757780,WOODLANDS INDUSTRIAL PARK E3,WOODLANDS INDUSTRIAL PK E3,no_match_in_property_info
-32,NEM00F,050032,NEW MARKET ROAD,NEW MARKET RD,no_match_in_property_info
-87,SAT00T,390087,JALAN SATU,JLN SATU,no_match_in_property_info
-175,HOS22Q,530175,,,undecoded_road_code
-178,HOS21Q,530178,,,undecoded_road_code
-25,PAT06T,518669,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-10,PAH04B,519217,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-43,PAT06T,518687,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-988C,BUG06A,533988,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-24,PAH04B,519231,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-179,HOS21Q,530179,,,undecoded_road_code
-45,PAH04B,519252,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-28,PAH04B,519235,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-41,PAH04B,519248,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-51,PAT06T,518695,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-988A,BUG06A,531988,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-176B,HOS22Q,532176,,,undecoded_road_code
-31,PAT06T,518675,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-175B,HOS22Q,532175,,,undecoded_road_code
-175A,HOS22Q,531175,,,undecoded_road_code
-18,PAH04B,519225,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-63,COD00B,140063,COMMONWEALTH DRIVE,C'WEALTH DR,no_match_in_property_info
-74,PAT06T,518718,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-58,PAH04B,519265,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-55,PAT06T,518699,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-65,PAT06T,518709,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-33,PAH04B,519240,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-988B,BUG06A,532988,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-82,MAL03N,360082,MACPHERSON LANE,MACPHERSON LANE,no_match_in_property_info
-86,PAT06T,518728,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-178B,HOS21Q,532178,,,undecoded_road_code
-176,HOS22Q,530176,,,undecoded_road_code
-34,PAH04B,519241,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-19,PAT06T,518663,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-110,PAR09C,519113,PASIR RIS ROAD,PASIR RIS RD,no_match_in_property_info
-46,PAT06T,518690,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-48,PAA07B,519715,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-179A,HOS21Q,531179,,,undecoded_road_code
-179B,HOS21Q,532179,,,undecoded_road_code
-178A,HOS21Q,531178,,,undecoded_road_code
-12A,TAS03D,164012,TAMAN HO SWEE,TMN HO SWEE,no_match_in_property_info
-14,TAS03D,161014,TAMAN HO SWEE,TMN HO SWEE,no_match_in_property_info
-65,PAH04B,519272,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-55,PAH04B,519262,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-74,PAH04B,519281,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-40,TAH03D,143040,TANGLIN HALT ROAD,TANGLIN HALT RD,no_match_in_property_info
-20,PAH04B,519227,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-7,PAH04B,519214,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-17,PAH04B,519224,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-46,PAA07B,519713,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-21,PAH04B,519228,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-9,PAH04B,519216,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-67,PAT06T,518711,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-52,PAH04B,519259,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-987C,BUG06A,533987,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-58,PAT06T,518702,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-44,PAH04B,519251,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-5,PAH04B,519212,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-77,PAT06T,518721,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-6,PAH04B,519213,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-17,PAT06T,518661,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-179C,HOS21Q,533179,,,undecoded_road_code
-178C,HOS21Q,533178,,,undecoded_road_code
-38,PAA07B,519705,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-60,PAT06T,518704,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-50,PAA07B,519735,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-180,HOS21Q,530180,,,undecoded_road_code
-39,PAT06T,518683,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-42,PAH04B,519249,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-44A,PAA07B,519738,PASIR RIS AVENUE,PASIR RIS AVE,no_match_in_property_info
-39,PAH04B,519246,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-19,PAH04B,519226,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-582A,BUG06A,531582,BUANGKOK GREEN,BUANGKOK GRN,no_match_in_property_info
-76,PAT06T,518720,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
-8,PAH04B,519215,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-66,PAH04B,519273,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-26,PAH04B,519233,PASIR RIS HEIGHTS,PASIR RIS HTS,no_match_in_property_info
-176A,HOS22Q,531176,,,undecoded_road_code
-79,PAT06T,518723,PASIR RIS TERRACE,PASIR RIS TER,no_match_in_property_info
+BLK_NO,ST_COD,POSTAL_COD,decoded_street,norm_street,footprint_m2,total_dwelling_units,reason,resolution,review_flag,review_note
+63,PAA07B,519725,PASIR RIS AVENUE,PASIR RIS AVE,100.42640160528346,,no_match_in_property_info,excluded_not_in_property_info,,
+57,PAA07B,519722,PASIR RIS AVENUE,PASIR RIS AVE,104.78007417725041,,no_match_in_property_info,excluded_not_in_property_info,,
+114,PAR09C,519115,PASIR RIS ROAD,PASIR RIS RD,209.9121294670208,,no_match_in_property_info,excluded_not_in_property_info,,
+40,PAH04B,519247,PASIR RIS HEIGHTS,PASIR RIS HTS,92.82899016015143,,no_match_in_property_info,excluded_not_in_property_info,,
+4,PAH04B,519211,PASIR RIS HEIGHTS,PASIR RIS HTS,94.38005700438919,,no_match_in_property_info,excluded_not_in_property_info,,
+57,PAH04B,519264,PASIR RIS HEIGHTS,PASIR RIS HTS,96.00887594478652,,no_match_in_property_info,excluded_not_in_property_info,,
+59,PAH04B,519266,PASIR RIS HEIGHTS,PASIR RIS HTS,89.58666318113123,,no_match_in_property_info,excluded_not_in_property_info,,
+44,PAA07B,519711,PASIR RIS AVENUE,PASIR RIS AVE,168.84207615011667,,no_match_in_property_info,excluded_not_in_property_info,,
+73,PAT06T,518717,PASIR RIS TERRACE,PASIR RIS TER,96.18072069277682,,no_match_in_property_info,excluded_not_in_property_info,,
+118,PAR09C,519117,PASIR RIS ROAD,PASIR RIS RD,134.2806633686935,,no_match_in_property_info,excluded_not_in_property_info,,
+44,PAT06T,518688,PASIR RIS TERRACE,PASIR RIS TER,96.24182561784934,,no_match_in_property_info,excluded_not_in_property_info,,
+37,PAT06T,518681,PASIR RIS TERRACE,PASIR RIS TER,94.10008482866033,,no_match_in_property_info,excluded_not_in_property_info,,
+23,PAH04B,519230,PASIR RIS HEIGHTS,PASIR RIS HTS,96.28829210908492,,no_match_in_property_info,excluded_not_in_property_info,,
+54,PAT06T,518698,PASIR RIS TERRACE,PASIR RIS TER,98.52212403067702,,no_match_in_property_info,excluded_not_in_property_info,,
+29,PAT06T,518673,PASIR RIS TERRACE,PASIR RIS TER,95.16493979016558,,no_match_in_property_info,excluded_not_in_property_info,,
+75,PAT06T,518719,PASIR RIS TERRACE,PASIR RIS TER,98.01674564494323,,no_match_in_property_info,excluded_not_in_property_info,,
+35,PAH04B,519242,PASIR RIS HEIGHTS,PASIR RIS HTS,96.32563864784133,,no_match_in_property_info,excluded_not_in_property_info,,
+52,PAA07B,519736,PASIR RIS AVENUE,PASIR RIS AVE,133.42827261930736,,no_match_in_property_info,excluded_not_in_property_info,,
+54,PAH04B,519261,PASIR RIS HEIGHTS,PASIR RIS HTS,95.88222546317378,,no_match_in_property_info,excluded_not_in_property_info,,
+32,PAH04B,519239,PASIR RIS HEIGHTS,PASIR RIS HTS,93.72913459674078,,no_match_in_property_info,excluded_not_in_property_info,,
+84,PAT06T,518727,PASIR RIS TERRACE,PASIR RIS TER,95.41821506717409,,no_match_in_property_info,excluded_not_in_property_info,,
+23,PAT06T,518667,PASIR RIS TERRACE,PASIR RIS TER,95.36876274633727,,no_match_in_property_info,excluded_not_in_property_info,,
+47,PAH04B,519254,PASIR RIS HEIGHTS,PASIR RIS HTS,95.33503604973451,,no_match_in_property_info,excluded_not_in_property_info,,
+22,PAH04B,519229,PASIR RIS HEIGHTS,PASIR RIS HTS,96.69965351305143,,no_match_in_property_info,excluded_not_in_property_info,,
+88,PAT06T,518729,PASIR RIS TERRACE,PASIR RIS TER,95.70722790941787,,no_match_in_property_info,excluded_not_in_property_info,,
+62,PAT06T,518706,PASIR RIS TERRACE,PASIR RIS TER,96.61633751784342,,no_match_in_property_info,excluded_not_in_property_info,,
+64,PAT06T,518708,PASIR RIS TERRACE,PASIR RIS TER,99.63576143955272,,no_match_in_property_info,excluded_not_in_property_info,,
+31,PAH04B,519238,PASIR RIS HEIGHTS,PASIR RIS HTS,98.9030231633486,,no_match_in_property_info,excluded_not_in_property_info,,
+15,PAH04B,519222,PASIR RIS HEIGHTS,PASIR RIS HTS,94.24221234097001,,no_match_in_property_info,excluded_not_in_property_info,,
+42,PAA07B,519709,PASIR RIS AVENUE,PASIR RIS AVE,132.2660318546145,,no_match_in_property_info,excluded_not_in_property_info,,
+43,PAH04B,519250,PASIR RIS HEIGHTS,PASIR RIS HTS,92.08453398036417,,no_match_in_property_info,excluded_not_in_property_info,,
+82,PAT06T,518726,PASIR RIS TERRACE,PASIR RIS TER,97.86747718327436,,no_match_in_property_info,excluded_not_in_property_info,,
+63,PAT06T,518707,PASIR RIS TERRACE,PASIR RIS TER,95.72967801291989,,no_match_in_property_info,excluded_not_in_property_info,,
+49,PAT06T,518693,PASIR RIS TERRACE,PASIR RIS TER,94.35095857519872,,no_match_in_property_info,excluded_not_in_property_info,,
+46,PAH04B,519253,PASIR RIS HEIGHTS,PASIR RIS HTS,94.44063530695573,,no_match_in_property_info,excluded_not_in_property_info,,
+54,PAA07B,519719,PASIR RIS AVENUE,PASIR RIS AVE,132.2644470092826,,no_match_in_property_info,excluded_not_in_property_info,,
+29,PAH04B,519236,PASIR RIS HEIGHTS,PASIR RIS HTS,95.98784757297616,,no_match_in_property_info,excluded_not_in_property_info,,
+12,PAH04B,519219,PASIR RIS HEIGHTS,PASIR RIS HTS,92.21707448235915,,no_match_in_property_info,excluded_not_in_property_info,,
+50,PAT06T,518694,PASIR RIS TERRACE,PASIR RIS TER,95.66302347217875,,no_match_in_property_info,excluded_not_in_property_info,,
+120,PAR09C,519118,PASIR RIS ROAD,PASIR RIS RD,131.8284605747268,,no_match_in_property_info,excluded_not_in_property_info,,
+11,PAH04B,519218,PASIR RIS HEIGHTS,PASIR RIS HTS,98.92493065602046,,no_match_in_property_info,excluded_not_in_property_info,,
+70,PAT06T,518714,PASIR RIS TERRACE,PASIR RIS TER,90.83012557077788,,no_match_in_property_info,excluded_not_in_property_info,,
+16,PAH04B,519223,PASIR RIS HEIGHTS,PASIR RIS HTS,93.40100551383975,,no_match_in_property_info,excluded_not_in_property_info,,
+53,PAH04B,519260,PASIR RIS HEIGHTS,PASIR RIS HTS,92.37921660153624,,no_match_in_property_info,excluded_not_in_property_info,,
+37,PAH04B,519244,PASIR RIS HEIGHTS,PASIR RIS HTS,97.40819623641849,,no_match_in_property_info,excluded_not_in_property_info,,
+14,PAH04B,519221,PASIR RIS HEIGHTS,PASIR RIS HTS,96.61336504816718,,no_match_in_property_info,excluded_not_in_property_info,,
+40,PAA07B,519707,PASIR RIS AVENUE,PASIR RIS AVE,133.4284269871894,,no_match_in_property_info,excluded_not_in_property_info,,
+21,PAT06T,518665,PASIR RIS TERRACE,PASIR RIS TER,90.86377026274492,,no_match_in_property_info,excluded_not_in_property_info,,
+61,PAH04B,519268,PASIR RIS HEIGHTS,PASIR RIS HTS,93.12265053096448,,no_match_in_property_info,excluded_not_in_property_info,,
+52,PAT06T,518696,PASIR RIS TERRACE,PASIR RIS TER,98.39166332013228,,no_match_in_property_info,excluded_not_in_property_info,,
+56,PAA07B,519721,PASIR RIS AVENUE,PASIR RIS AVE,133.42753835452265,,no_match_in_property_info,excluded_not_in_property_info,,
+50,PAH04B,519257,PASIR RIS HEIGHTS,PASIR RIS HTS,95.92931730398021,,no_match_in_property_info,excluded_not_in_property_info,,
+61,PAT06T,518705,PASIR RIS TERRACE,PASIR RIS TER,93.86423010197825,,no_match_in_property_info,excluded_not_in_property_info,,
+48,PAH04B,519255,PASIR RIS HEIGHTS,PASIR RIS HTS,92.69562259743151,,no_match_in_property_info,excluded_not_in_property_info,,
+72,PAH04B,519279,PASIR RIS HEIGHTS,PASIR RIS HTS,96.03199465329834,,no_match_in_property_info,excluded_not_in_property_info,,
+53,PAT06T,518697,PASIR RIS TERRACE,PASIR RIS TER,94.69889708896098,,no_match_in_property_info,excluded_not_in_property_info,,
+36,PAH04B,519243,PASIR RIS HEIGHTS,PASIR RIS HTS,97.20969508532886,,no_match_in_property_info,excluded_not_in_property_info,,
+53,PAA07B,519718,PASIR RIS AVENUE,PASIR RIS AVE,108.87544630757269,,no_match_in_property_info,excluded_not_in_property_info,,
+56,PAH04B,519263,PASIR RIS HEIGHTS,PASIR RIS HTS,95.47185767061026,,no_match_in_property_info,excluded_not_in_property_info,,
+114A,PAR09C,519153,PASIR RIS ROAD,PASIR RIS RD,215.07840132721242,,no_match_in_property_info,excluded_not_in_property_info,,
+67,PAH04B,519274,PASIR RIS HEIGHTS,PASIR RIS HTS,91.04891314666031,,no_match_in_property_info,excluded_not_in_property_info,,
+72,PAT06T,518716,PASIR RIS TERRACE,PASIR RIS TER,96.87678024315304,,no_match_in_property_info,excluded_not_in_property_info,,
+116,PAR09C,519116,PASIR RIS ROAD,PASIR RIS RD,131.82923471049043,,no_match_in_property_info,excluded_not_in_property_info,,
+45,PAA07B,519712,PASIR RIS AVENUE,PASIR RIS AVE,132.35602492556382,,no_match_in_property_info,excluded_not_in_property_info,,
+41,PAT06T,518685,PASIR RIS TERRACE,PASIR RIS TER,97.29322336626858,,no_match_in_property_info,excluded_not_in_property_info,,
+87,SAT00T,390087,JALAN SATU,JLN SATU,2390.4541755903847,,no_match_in_property_info,excluded_not_in_property_info,,"Mountbatten Community Club, not residential"
+25,PAT06T,518669,PASIR RIS TERRACE,PASIR RIS TER,92.76305876559843,,no_match_in_property_info,excluded_not_in_property_info,,
+10,PAH04B,519217,PASIR RIS HEIGHTS,PASIR RIS HTS,95.40781163239122,,no_match_in_property_info,excluded_not_in_property_info,,
+43,PAT06T,518687,PASIR RIS TERRACE,PASIR RIS TER,90.2869781721718,,no_match_in_property_info,excluded_not_in_property_info,,
+24,PAH04B,519231,PASIR RIS HEIGHTS,PASIR RIS HTS,93.73954565460512,,no_match_in_property_info,excluded_not_in_property_info,,
+45,PAH04B,519252,PASIR RIS HEIGHTS,PASIR RIS HTS,99.26026609200531,,no_match_in_property_info,excluded_not_in_property_info,,
+28,PAH04B,519235,PASIR RIS HEIGHTS,PASIR RIS HTS,92.23259299712959,,no_match_in_property_info,excluded_not_in_property_info,,
+41,PAH04B,519248,PASIR RIS HEIGHTS,PASIR RIS HTS,99.69747411880333,,no_match_in_property_info,excluded_not_in_property_info,,
+51,PAT06T,518695,PASIR RIS TERRACE,PASIR RIS TER,95.0385611710918,,no_match_in_property_info,excluded_not_in_property_info,,
+31,PAT06T,518675,PASIR RIS TERRACE,PASIR RIS TER,91.02526304378088,,no_match_in_property_info,excluded_not_in_property_info,,
+18,PAH04B,519225,PASIR RIS HEIGHTS,PASIR RIS HTS,93.7157615482022,,no_match_in_property_info,excluded_not_in_property_info,,
+63,COD00B,140063,COMMONWEALTH DRIVE,C'WEALTH DR,926.7769682447732,116.0,no_match_in_property_info,included_imputed,,Residential HDB block
+74,PAT06T,518718,PASIR RIS TERRACE,PASIR RIS TER,96.8643220056355,,no_match_in_property_info,excluded_not_in_property_info,,
+58,PAH04B,519265,PASIR RIS HEIGHTS,PASIR RIS HTS,92.80328565020052,,no_match_in_property_info,excluded_not_in_property_info,,
+55,PAT06T,518699,PASIR RIS TERRACE,PASIR RIS TER,96.4431803548706,,no_match_in_property_info,excluded_not_in_property_info,,
+65,PAT06T,518709,PASIR RIS TERRACE,PASIR RIS TER,97.18538489105225,,no_match_in_property_info,excluded_not_in_property_info,,
+33,PAH04B,519240,PASIR RIS HEIGHTS,PASIR RIS HTS,94.79985372688759,,no_match_in_property_info,excluded_not_in_property_info,,
+82,MAL03N,360082,MACPHERSON LANE,MACPHERSON LANE,1115.5065489517087,113.0,no_match_in_property_info,included_imputed,verify_occupancy,SERS block (2018) repurposed for PPHS temporary housing
+86,PAT06T,518728,PASIR RIS TERRACE,PASIR RIS TER,97.27532832007525,,no_match_in_property_info,excluded_not_in_property_info,,
+34,PAH04B,519241,PASIR RIS HEIGHTS,PASIR RIS HTS,93.01013871847628,,no_match_in_property_info,excluded_not_in_property_info,,
+19,PAT06T,518663,PASIR RIS TERRACE,PASIR RIS TER,97.11601286183256,,no_match_in_property_info,excluded_not_in_property_info,,
+110,PAR09C,519113,PASIR RIS ROAD,PASIR RIS RD,134.28269692515659,,no_match_in_property_info,excluded_not_in_property_info,,
+46,PAT06T,518690,PASIR RIS TERRACE,PASIR RIS TER,93.46704712315923,,no_match_in_property_info,excluded_not_in_property_info,,
+48,PAA07B,519715,PASIR RIS AVENUE,PASIR RIS AVE,133.42800295290886,,no_match_in_property_info,excluded_not_in_property_info,,
+65,PAH04B,519272,PASIR RIS HEIGHTS,PASIR RIS HTS,97.8268864627053,,no_match_in_property_info,excluded_not_in_property_info,,
+55,PAH04B,519262,PASIR RIS HEIGHTS,PASIR RIS HTS,96.57638217717042,,no_match_in_property_info,excluded_not_in_property_info,,
+74,PAH04B,519281,PASIR RIS HEIGHTS,PASIR RIS HTS,98.14414798519763,,no_match_in_property_info,excluded_not_in_property_info,,
+40,TAH03D,143040,TANGLIN HALT ROAD,TANGLIN HALT RD,939.8624333523169,118.0,no_match_in_property_info,included_imputed,verify_occupancy,SERS block with PPHS redevelopment plans
+20,PAH04B,519227,PASIR RIS HEIGHTS,PASIR RIS HTS,92.94018313542,,no_match_in_property_info,excluded_not_in_property_info,,
+7,PAH04B,519214,PASIR RIS HEIGHTS,PASIR RIS HTS,94.35410992890186,,no_match_in_property_info,excluded_not_in_property_info,,
+17,PAH04B,519224,PASIR RIS HEIGHTS,PASIR RIS HTS,99.70158298820424,,no_match_in_property_info,excluded_not_in_property_info,,
+46,PAA07B,519713,PASIR RIS AVENUE,PASIR RIS AVE,132.26437437848375,,no_match_in_property_info,excluded_not_in_property_info,,
+21,PAH04B,519228,PASIR RIS HEIGHTS,PASIR RIS HTS,99.10482636715577,,no_match_in_property_info,excluded_not_in_property_info,,
+9,PAH04B,519216,PASIR RIS HEIGHTS,PASIR RIS HTS,100.72167347297957,,no_match_in_property_info,excluded_not_in_property_info,,
+67,PAT06T,518711,PASIR RIS TERRACE,PASIR RIS TER,91.04296288667544,,no_match_in_property_info,excluded_not_in_property_info,,
+52,PAH04B,519259,PASIR RIS HEIGHTS,PASIR RIS HTS,93.12244170752723,,no_match_in_property_info,excluded_not_in_property_info,,
+58,PAT06T,518702,PASIR RIS TERRACE,PASIR RIS TER,99.46665797734809,,no_match_in_property_info,excluded_not_in_property_info,,
+44,PAH04B,519251,PASIR RIS HEIGHTS,PASIR RIS HTS,95.10590864676197,,no_match_in_property_info,excluded_not_in_property_info,,
+5,PAH04B,519212,PASIR RIS HEIGHTS,PASIR RIS HTS,92.51504168125422,,no_match_in_property_info,excluded_not_in_property_info,,
+77,PAT06T,518721,PASIR RIS TERRACE,PASIR RIS TER,96.40391205779356,,no_match_in_property_info,excluded_not_in_property_info,,
+6,PAH04B,519213,PASIR RIS HEIGHTS,PASIR RIS HTS,88.53449430024699,,no_match_in_property_info,excluded_not_in_property_info,,
+17,PAT06T,518661,PASIR RIS TERRACE,PASIR RIS TER,96.84343369915108,,no_match_in_property_info,excluded_not_in_property_info,,
+38,PAA07B,519705,PASIR RIS AVENUE,PASIR RIS AVE,132.26534562075102,,no_match_in_property_info,excluded_not_in_property_info,,
+60,PAT06T,518704,PASIR RIS TERRACE,PASIR RIS TER,95.91763818065962,,no_match_in_property_info,excluded_not_in_property_info,,
+50,PAA07B,519735,PASIR RIS AVENUE,PASIR RIS AVE,132.2652866995557,,no_match_in_property_info,excluded_not_in_property_info,,
+39,PAT06T,518683,PASIR RIS TERRACE,PASIR RIS TER,93.70953971601101,,no_match_in_property_info,excluded_not_in_property_info,,
+42,PAH04B,519249,PASIR RIS HEIGHTS,PASIR RIS HTS,98.86770590843153,,no_match_in_property_info,excluded_not_in_property_info,,
+44A,PAA07B,519738,PASIR RIS AVENUE,PASIR RIS AVE,169.93278735253747,,no_match_in_property_info,excluded_not_in_property_info,,
+39,PAH04B,519246,PASIR RIS HEIGHTS,PASIR RIS HTS,93.26881161999697,,no_match_in_property_info,excluded_not_in_property_info,,
+19,PAH04B,519226,PASIR RIS HEIGHTS,PASIR RIS HTS,92.21289886552937,,no_match_in_property_info,excluded_not_in_property_info,,
+76,PAT06T,518720,PASIR RIS TERRACE,PASIR RIS TER,97.00903833225057,,no_match_in_property_info,excluded_not_in_property_info,,
+8,PAH04B,519215,PASIR RIS HEIGHTS,PASIR RIS HTS,94.51568290736284,,no_match_in_property_info,excluded_not_in_property_info,,
+66,PAH04B,519273,PASIR RIS HEIGHTS,PASIR RIS HTS,96.11072805330689,,no_match_in_property_info,excluded_not_in_property_info,,
+26,PAH04B,519233,PASIR RIS HEIGHTS,PASIR RIS HTS,93.50700753054522,,no_match_in_property_info,excluded_not_in_property_info,,
+79,PAT06T,518723,PASIR RIS TERRACE,PASIR RIS TER,97.68282528157826,,no_match_in_property_info,excluded_not_in_property_info,,
