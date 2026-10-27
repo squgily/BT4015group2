@@ -21,6 +21,8 @@ import json
 import math
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import BoundaryNorm, ListedColormap
 from matplotlib.patches import Patch, Polygon as MplPolygon
@@ -294,7 +296,7 @@ def set_map_style(ax):
 
 
 def draw_fee_map(ax, subzones, area_df, spatial_unit_label="Planning Area"):
-    lookup = dict(zip(area_df["planning_area"], area_df["mean_fee_sgd"]))
+    lookup = dict(zip(area_df["planning_area"], area_df["median_fee_sgd"]))
     patches, values = feature_patches(subzones, lookup)
     # Reverse viridis so higher (more expensive) fees use darker colours.
     collection = PatchCollection(patches, cmap="viridis_r", edgecolor="none", linewidth=0)
@@ -305,11 +307,11 @@ def draw_fee_map(ax, subzones, area_df, spatial_unit_label="Planning Area"):
     ax.autoscale_view()
     set_map_style(ax)
     ax.set_title(
-        f"Mean Full-Day SC Nursery Fee by {spatial_unit_label}",
+        f"Median Full-Day SC Nursery Fee by {spatial_unit_label}",
         fontweight="bold",
     )
     cbar = ax.figure.colorbar(collection, ax=ax, fraction=0.032, pad=0.01)
-    cbar.set_label("Mean monthly fee (SGD)")
+    cbar.set_label("Median monthly fee (SGD)")
     return collection
 
 
@@ -369,7 +371,7 @@ def draw_moran_scatter(
     ax.axvline(0, color="#777777", linewidth=0.7)
     ax.set_xlim(-extent, extent)
     ax.set_ylim(-extent, extent)
-    ax.set_xlabel("Standardised mean nursery fee")
+    ax.set_xlabel("Standardised median nursery fee")
     ax.set_ylabel("Spatial lag")
     ax.set_title(
         f"Moran Scatterplot (I: {observed_i:.3f}, p = {p_value:.3f})",
@@ -521,7 +523,7 @@ def main():
     area_df["centroid_lat"] = centroid_array[:, 1]
     binary, weights = knn_weights(centroid_array, args.k)
 
-    fees = area_df["mean_fee_sgd"].to_numpy()
+    fees = area_df["median_fee_sgd"].to_numpy()
     z = (fees - fees.mean()) / fees.std(ddof=0)
     lag = weights @ z
     observed_i, global_p, global_perm, local_i, local_p = permutation_inference(
@@ -597,7 +599,7 @@ def main():
         plt.close(fig)
 
     significant = area_df.loc[area_df["local_permutation_p"] < 0.05, [
-        "planning_area", "mean_fee_sgd", "centre_count", "lisa_cluster_p05", "local_moran_i", "local_permutation_p", "local_fdr_q"
+        "planning_area", "median_fee_sgd", "centre_count", "lisa_cluster_p05", "local_moran_i", "local_permutation_p", "local_fdr_q"
     ]].rename(columns={"planning_area": unit_slug}).sort_values(
         ["lisa_cluster_p05", "local_permutation_p"]
     )
@@ -609,7 +611,7 @@ def main():
 
 - Source points: `{args.centres.as_posix()}`; null/non-numeric `FULL_DAY_SC_NURSERY_FEE` records excluded.
 - Spatial unit: 2019 {unit_label_plural} (`{name_field}`) from `{args.subzones.as_posix()}`.
-- Area statistic: mean centre fee in SGD. The centre count and median are retained for context.
+- Area statistic: median centre fee in SGD. The centre count and mean are retained for context.
 - Spatial weights: symmetric {args.k}-nearest-neighbour graph based on area-weighted {unit_label.lower()} centroids, row-standardised.
 - Inference: {args.permutations:,} random permutations, seed {args.seed}. Local p-values are exploratory; Benjamini-Hochberg FDR q-values are also reported.
 
@@ -627,13 +629,13 @@ def main():
 - Randomisation expectation: **{expected_i:.4f}**
 - Permutation pseudo-p: **{global_p:.4f}**
 
-The area-level mean fees show **{direction} spatial autocorrelation**, and the result is **{decision} at the 5% level** under this weights specification.
+The area-level median fees show **{direction} spatial autocorrelation**, and the result is **{decision} at the 5% level** under this weights specification.
 
 ## Local Moran clusters (raw permutation p < 0.05)
 
 {dataframe_to_markdown(significant) if len(significant) else f'No {unit_label.lower()} is locally significant at raw p < 0.05.'}
 
-Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05` when confirmatory control of false discoveries is required. Results describe {unit_label.lower()} means, not individual-centre fee similarity.
+Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05` when confirmatory control of false discoveries is required. Results describe {unit_label.lower()} medians, not individual-centre fee similarity.
 """
     (args.output_dir / "analysis_summary.md").write_text(summary, encoding="utf-8")
     print(summary)
