@@ -1,0 +1,17 @@
+metric,value
+matched_planning_areas,30.0
+intercept_sgd,-114.84698351731171
+slope_sgd_per_1000_income,107.14488199917025
+slope_bootstrap_ci_95_low,62.99345136564452
+slope_bootstrap_ci_95_high,138.58424707496346
+r_squared,0.7208922049112721
+residual_standard_error_sgd,267.0684035739479
+pearson_r,0.8490537114407263
+pearson_permutation_p_two_sided,6e-05
+spearman_rho,0.4609809166329103
+spearman_permutation_p_two_sided,0.01062
+midpoint_sensitivity_slope,100.77806860926694
+midpoint_sensitivity_r_squared,0.6823587114474671
+theil_sen_robust_slope,7.392308075095528
+slope_excluding_most_influential_area,90.24602694835164
+r_squared_excluding_most_influential_area,0.6593230620233139
