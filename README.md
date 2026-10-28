@@ -67,3 +67,37 @@ python scripts/experiment_clustering.py  # optional: re-run the method compariso
 `dwelling_units` and `gfa_m2` are sums over the cluster's blocks; `diameter_m` is the largest
 block-to-block distance (always ≤ 300 m). All three layers carry `color_idx` (0–7, neighbouring
 clusters never share a value): in QGIS use Categorized symbology on `color_idx`.
+
+## Walking access (OSRM) and the integrated subzone table
+
+Local OSRM (installed via Homebrew, no Docker) with the foot profile on a Singapore clip of the
+Geofabrik extract. Full origin × destination walking-time tables for all 10,769 residential HDB
+blocks are stored as parquet in git-ignored `large_data/` (ask Minh / Dropbox); the committable
+per-block and per-subzone summaries are in `output/`.
+
+```
+brew install osrm-backend osmium-tool
+osmium extract --bbox 103.55,1.15,104.15,1.50 -o large_data/singapore.osm.pbf large_data/malaysia-singapore-brunei-latest.osm.pbf
+osrm-extract -p "$(brew --prefix osrm-backend)/share/osrm/profiles/foot.lua" large_data/singapore.osm.pbf
+osrm-partition large_data/singapore.osrm && osrm-customize large_data/singapore.osrm
+osrm-routed --algorithm mld --max-table-size 10000 -p 5001 large_data/singapore.osrm &
+python scripts/geocode_centres_2026.py      # -> data/Centres_2026.geojson (canonical centre layer)
+python scripts/build_walk_matrix.py         # -> large_data/walk_<set>_{time_min,dist_m}.parquet + output/hdb_walk_access.csv
+python scripts/summarise_walk_matrix.py     # rebuild hdb_walk_access.csv from parquet without OSRM
+python scripts/build_subzone_stats.py       # -> output/hdb_access_children.csv, output/subzone_stats.csv, gpkg layer subzone_stats
+```
+
+| Path | What |
+|---|---|
+| `data/Centres_2026.geojson` | **Canonical centre layer.** 1,651 active childcare (CC) + kindergarten (KN) centres from the Oct-2026 ECDA listing, geocoded by postal code (1,359 reused from the 2021 points, 292 via OneMap). Has `centre_code`, operator, service model, scheme, hours. The 2021 GeoJSON is stale: 292 active centres have no 2021 point and 541 of its points are at postal codes no longer listed. |
+| `data/MRTStationExits_2026.geojson`, `data/BusStops_2026.geojson` | LTA MRT exits (613) and bus stops (5,205), data.gov.sg, Oct 2026 |
+| `output/hdb_walk_access.csv` | per block: nearest walk minutes / metres / id and counts within 10 and 15 min, for `centres` (2026), `centres2021` (comparison) and `mrt_exits`. Bus stops not run yet (`--sets bus_stops`). |
+| `output/hdb_access_children.csv` | the above joined to Jessie's children 0–4 / 5–9 and flat-type mix |
+| `output/subzone_stats.csv` + gpkg layer `subzone_stats` | per subzone: children, dwelling units, % 1–3 room, centres in polygon (by type), centres per 1,000 children, centre and child density, child-weighted nearest walk time, share of children within 10 / 15 min of a centre, MRT walk time, planning-area median income |
+
+Headline (2026 centres): median walk from an HDB block to the nearest centre 3.4 min (p90 6.4);
+only 3 blocks have no centre within 15 min; 2,350 blocks are more than 15 min from an MRT exit.
+Walking access to *a* centre is near-universal, so the discriminating measures are supply per child
+(`centres_per_1000_children`, p10–p90 = 2.6–9.6 across HDB subzones) and the walk-time distribution,
+not a binary "has access". Two unreachable destinations (a centre and the MRT exit inside Changi
+Airport) are expected: the airport is cut off from the public footpath network.
