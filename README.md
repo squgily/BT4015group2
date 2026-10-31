@@ -91,7 +91,7 @@ python scripts/build_subzone_stats.py       # -> output/hdb_access_children.csv,
 |---|---|
 | `data/Centres_2026.geojson` | **Canonical centre layer.** 1,651 active childcare (CC) + kindergarten (KN) centres from the Oct-2026 ECDA listing, geocoded by postal code (1,359 reused from the 2021 points, 292 via OneMap). Has `centre_code`, operator, service model, scheme, hours. The 2021 GeoJSON is stale: 292 active centres have no 2021 point and 541 of its points are at postal codes no longer listed. |
 | `data/MRTStationExits_2026.geojson`, `data/BusStops_2026.geojson` | LTA MRT exits (613) and bus stops (5,205), data.gov.sg, Oct 2026 |
-| `output/hdb_walk_access.csv` | per block: nearest walk minutes / metres / id and counts within 10 and 15 min, for `centres` (2026), `centres2021` (comparison) and `mrt_exits`. Bus stops not run yet (`--sets bus_stops`). |
+| `output/hdb_walk_access.csv` | per block: nearest walk minutes / metres / id and counts within 10 and 15 min, for `centres` (2026), `centres2021` (comparison) and `mrt_exits`. **Bus stops deliberately not run** (prof-confirmed 2026-10-30): every block is within 1–6 min of a stop, so the variable has no spread. Evidence: `scripts/check_bus_stop_variance.py`, decision in `docs/decisions.md`. |
 | `output/hdb_access_children.csv` | the above joined to Jessie's children 0–4 / 5–9 and flat-type mix |
 | `output/subzone_stats.csv` + gpkg layer `subzone_stats` | per subzone: children, dwelling units, % 1–3 room, centres in polygon (by type), centres per 1,000 children, centre and child density, child-weighted nearest walk time, share of children within 10 / 15 min of a centre, MRT walk time, planning-area median income |
 
