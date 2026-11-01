@@ -15,6 +15,10 @@ analysis covers currently listed centres rather than the 2021 GeoJSON.
 4. Join the Nursery (4 yrs old) Full Day/SC fee by centre_code, using the same
    rules as join_childcare_fees.py. Centres with no listed fee, or several
    conflicting fees, are left missing and labelled in fee_status.
+5. Add back the "na" rows confirmed as operating centres absent from the list
+   (VERIFIED_ADDITIONS, record_source "verified_addition"). They keep the ECDA
+   fields as listed, with no centre_code and no fee.
+6. Attach the 2019 Master Plan subzone, planning area and region.
 
 Outputs:
   output/childcare_centres_2026.gpkg       layer "centres", EPSG:3414
@@ -49,6 +53,13 @@ OUT_GPKG = Path("output/childcare_centres_2026.gpkg")
 OUT_LAYER = "centres"
 OUT_REVIEW = Path("output/childcare_centres_2026_review.csv")
 GEOCODE_CACHE = Path("output/onemap_geocode_cache.csv")
+SUBZONES = Path("data/MasterPlanSubZones_2019.geojson")
+
+# "na" rows verified as operating on 2026-11-01 (see excluded_centres_verification_2026.csv).
+# Keyed by tp_code. The name comes from the operator's page, as the ECDA row has none.
+VERIFIED_ADDITIONS = {
+    "TP1356": "PCF Sparkletots Preschool @ Yuhua Blk 285C (KN)",
+}
 
 CRS_OUT = "EPSG:3414"  # SVY21 / Singapore TM, metres
 ONEMAP_SEARCH = "https://www.onemap.gov.sg/api/common/elastic/search"
@@ -72,10 +83,16 @@ def load_centres_2026() -> pd.DataFrame:
     centres["postal_code"] = centres["postal_code"].str.strip().str.zfill(6)
     placeholder = centres["centre_code"].str.strip().str.lower() == "na"
     print(f"2026 rows: {len(centres)}, dropping {placeholder.sum()} with centre_code 'na'")
-    centres = centres[~placeholder].drop_duplicates("centre_code").reset_index(drop=True)
+    added = centres[placeholder & centres["tp_code"].isin(VERIFIED_ADDITIONS)].copy()
+    added["centre_name"] = added["tp_code"].map(VERIFIED_ADDITIONS)
+    added["centre_code"] = ""
+    added["record_source"] = "verified_addition"
+    print(f"Adding back {len(added)} verified 'na' rows: {', '.join(added['tp_code'])}")
+    centres = centres[~placeholder].drop_duplicates("centre_code").assign(record_source="ecda_listed")
+    centres = pd.concat([centres, added], ignore_index=True)
     return centres[
-        ["centre_code", "centre_name", "organisation_code", "organisation_description",
-         "service_model", "centre_address", "postal_code", "last_updated"]
+        ["centre_code", "tp_code", "record_source", "centre_name", "organisation_code",
+         "organisation_description", "service_model", "centre_address", "postal_code", "last_updated"]
     ]
 
 
@@ -208,7 +225,16 @@ def join_fees(centres: pd.DataFrame) -> pd.DataFrame:
         centres["centre_code"].isin(has_benchmark_row) & centres["FULL_DAY_SC_NURSERY_FEE"].isna(),
         "fee_status",
     ] = "conflicting_fees"
+    centres.loc[centres["centre_code"] == "", "fee_status"] = "no_centre_code"
     return centres
+
+
+def add_subzones(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    zones = gpd.read_file(SUBZONES).to_crs(CRS_OUT)
+    cols = ["SUBZONE_C", "SUBZONE_N", "PLN_AREA_N", "REGION_N"]
+    out = gpd.sjoin(gdf, zones[cols + ["geometry"]], how="left", predicate="within")
+    assert len(out) == len(gdf), "a centre fell in two subzones"
+    return out.drop(columns="index_right")
 
 
 def main() -> None:
@@ -226,6 +252,8 @@ def main() -> None:
         geometry=gpd.points_from_xy(centres.loc[located, "lon"], centres.loc[located, "lat"]),
         crs="EPSG:4326",
     ).to_crs(CRS_OUT)
+    gdf = add_subzones(gdf)
+    gdf["centre_code"] = gdf["centre_code"].replace("", None)
     OUT_GPKG.parent.mkdir(parents=True, exist_ok=True)
     gdf.to_file(OUT_GPKG, layer=OUT_LAYER, driver="GPKG")
 
@@ -238,6 +266,8 @@ def main() -> None:
     print(f"\nCentres: {len(centres)}, located: {located.sum()}, no location: {(~located).sum()}")
     print(centres["location_source"].value_counts(dropna=False).to_string())
     print(centres["fee_status"].value_counts().to_string())
+    print(gdf["record_source"].value_counts().to_string())
+    print(f"Centres outside every subzone: {gdf['SUBZONE_C'].isna().sum()}")
     print(f"Wrote {OUT_GPKG} ({len(gdf)} centres) and {OUT_REVIEW} ({len(review)} rows)")
 
 
