@@ -2,7 +2,8 @@
 BT4015 - build the walking-time matrices with a local OSRM server (foot profile).
 
 Origins:      output/hdb_blocks.gpkg, layer hdb_points (residential block centroids, EPSG:3414)
-Destinations: data/Centres_2026.geojson              -> centres (geocoded 2026 ECDA listing)
+Destinations: output/childcare_centres_2026.gpkg     -> centres (canonical 2026 layer, 1,796; Jessie)
+              output/childcare_centres_2026.gpkg     -> planned (13 upcoming ECDA centres, layer 'planned')
               data/ChildCareServices_2021.geojson   -> centres2021 (legacy, comparison only)
               data/MRTStationExits_2026.geojson     -> mrt_exits
               data/BusStops_2026.geojson            -> bus_stops
@@ -19,7 +20,9 @@ Setup (one-off, see README):
   osrm-customize large_data/singapore.osrm
   osrm-routed --algorithm mld --max-table-size 10000 -p 5001 large_data/singapore.osrm &
 
-Run:  python scripts/build_walk_matrix.py [--sets centres,mrt_exits,bus_stops] [--port 5001]
+Run:  python scripts/build_walk_matrix.py [--sets centres,mrt_exits] [--port 5001]
+      NB: output/hdb_walk_access.csv is written for the sets passed only; run summarise_walk_matrix.py
+      afterwards to rebuild it from every parquet in large_data/.
 """
 import argparse
 import sys
@@ -38,12 +41,28 @@ GPKG = ROOT / "output" / "hdb_blocks.gpkg"
 LARGE = ROOT / "large_data"
 OUT = ROOT / "output"
 
+# (path, id_col, layer). "centres" is the team's canonical layer (Jessie, output/childcare_centres_2026.gpkg):
+# 1,796 centres operating Oct 2026; one verified addition has no centre_code, so the matrix id is
+# centre_code with tp_code as fallback (see load_dest). data/Centres_2026.geojson is deprecated.
 DEST_SETS = {
-    "centres": (ROOT / "data" / "Centres_2026.geojson", "centre_code"),   # geocoded Oct-2026 ECDA listing
-    "centres2021": (ROOT / "data" / "ChildCareServices_2021.geojson", "OBJECTID"),  # legacy, for comparison
-    "mrt_exits": (ROOT / "data" / "MRTStationExits_2026.geojson", "OBJECTID"),
-    "bus_stops": (ROOT / "data" / "BusStops_2026.geojson", "OBJECTID_1"),
+    "centres": (ROOT / "output" / "childcare_centres_2026.gpkg", "centre_id", "centres"),
+    "planned": (ROOT / "output" / "childcare_centres_2026.gpkg", "tp_code", "planned"),  # 13 upcoming centres
+    "centres2021": (ROOT / "data" / "ChildCareServices_2021.geojson", "OBJECTID", None),  # legacy, for comparison
+    "mrt_exits": (ROOT / "data" / "MRTStationExits_2026.geojson", "OBJECTID", None),
+    "bus_stops": (ROOT / "data" / "BusStops_2026.geojson", "OBJECTID_1", None),  # not used: see docs/decisions.md
 }
+
+
+def load_dest(name):
+    """Destination GeoDataFrame and its id array for a DEST_SETS entry."""
+    path, id_col, layer = DEST_SETS[name]
+    dest = pyogrio.read_dataframe(path, layer=layer) if layer else pyogrio.read_dataframe(path)
+    if id_col == "centre_id":
+        dest["centre_id"] = dest["centre_code"].where(dest["centre_code"].notna() & (dest["centre_code"] != ""),
+                                                      dest["tp_code"])
+    ids = dest[id_col].astype(str).to_numpy()
+    assert len(set(ids)) == len(ids), f"{name}: destination ids are not unique"
+    return dest, ids
 CHUNK = 100
 THRESHOLDS_MIN = (10, 15)
 
@@ -76,9 +95,8 @@ def osrm_table(base, src_xy, dst_xy, annotation, retries=3):
 
 
 def build(base, name, origins, o_xy, o_ids):
-    path, id_col = DEST_SETS[name]
-    dest = pyogrio.read_dataframe(path)
-    d_xy, d_ids = lonlat(dest), dest[id_col].to_numpy()
+    dest, d_ids = load_dest(name)
+    d_xy = lonlat(dest)
     T = np.full((len(o_xy), len(d_xy)), np.nan)
     D = np.full_like(T, np.nan)
     o_chunks = range(0, len(o_xy), CHUNK)
@@ -95,7 +113,7 @@ def build(base, name, origins, o_xy, o_ids):
           f"({n_nan / T.size:.4%}); median nearest = {np.nanmedian(np.nanmin(T, axis=1)):.1f} min")
     LARGE.mkdir(exist_ok=True)
     for arr, tag in ((T, "time_min"), (D, "dist_m")):
-        df = pd.DataFrame(arr, index=pd.Index(o_ids, name="OBJECTID"), columns=d_ids.astype(str))
+        df = pd.DataFrame(arr, index=pd.Index(o_ids, name="OBJECTID"), columns=d_ids)
         df.to_parquet(LARGE / f"walk_{name}_{tag}.parquet")
     summary = pd.DataFrame({"OBJECTID": o_ids,
                             f"{name}_nearest_min": np.nanmin(T, axis=1),
