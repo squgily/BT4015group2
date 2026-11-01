@@ -3,14 +3,16 @@
 The script uses only pandas, numpy, and matplotlib. GeoJSON parsing and the
 point-in-polygon join are implemented here so it does not require GeoPandas.
 
-Outputs (under output/spatial_autocorrelation_nursery_fee by default):
+Outputs (under the spatial-unit-specific output directory):
   - planning_area_nursery_fee_moran.csv
   - global_moran_permutations.csv
   - analysis_summary.md
   - nursery_fee_choropleth.png
+  - global_moran_cluster_map.png
   - global_moran_scatterplot.png
   - global_moran_permutation.png
   - local_moran_lisa_map.png
+  - global_moran_clusters_lisa_side_by_side.png
   - spatial_autocorrelation_overview.png
 """
 
@@ -315,6 +317,43 @@ def draw_fee_map(ax, subzones, area_df, spatial_unit_label="Planning Area"):
     return collection
 
 
+def draw_global_moran_cluster_map(
+    ax,
+    subzones,
+    area_df,
+    observed_i,
+    expected_i,
+    p_value,
+    spatial_unit_label="Planning Area",
+):
+    """Map each polygon to its quadrant in the Global Moran scatterplot."""
+    lookup = dict(zip(area_df["planning_area"], area_df["lisa_quadrant"]))
+    patches, clusters = feature_patches(subzones, lookup, missing="No data")
+    colors = [CLUSTER_COLORS[cluster] for cluster in clusters]
+    collection = PatchCollection(patches, facecolor=colors, edgecolor="none", linewidth=0)
+    collection.set_antialiased(False)
+    ax.add_collection(collection)
+    add_planning_area_boundaries(ax, subzones)
+    ax.autoscale_view()
+    set_map_style(ax)
+    ax.set_title(
+        f"Global Moran Clusters by {spatial_unit_label}",
+        fontweight="bold",
+    )
+    order = ["High-High", "Low-Low", "High-Low", "Low-High"]
+    counts = area_df["lisa_quadrant"].value_counts().to_dict()
+    ax.legend(
+        handles=[
+            Patch(facecolor=CLUSTER_COLORS[cluster], label=f"{cluster} ({counts.get(cluster, 0)})")
+            for cluster in order
+        ],
+        loc="lower left",
+        frameon=True,
+        fontsize=8,
+    )
+    return collection
+
+
 CLUSTER_COLORS = {
     "Not significant": "#d9d9d9",
     "High-High": "#d7191c",
@@ -451,6 +490,37 @@ def save_individual_plot(draw_function, path: Path, figsize=(9, 7)):
     plt.close(fig)
 
 
+def save_global_lisa_comparison(
+    path,
+    subzones,
+    area_df,
+    observed_i,
+    expected_i,
+    global_p,
+    spatial_unit_label,
+):
+    """Save the Global Moran quadrant map beside the Local Moran cluster map."""
+    fig, axes = plt.subplots(1, 2, figsize=(16, 7.5))
+    draw_global_moran_cluster_map(
+        axes[0],
+        subzones,
+        area_df,
+        observed_i,
+        expected_i,
+        global_p,
+        spatial_unit_label,
+    )
+    draw_lisa_map(axes[1], subzones, area_df, spatial_unit_label)
+    fig.suptitle(
+        f"Global and Local Moran Analysis of Nursery Fees — {spatial_unit_label}",
+        fontsize=16,
+        fontweight="bold",
+    )
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    fig.savefig(path, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
 def dataframe_to_markdown(df: pd.DataFrame) -> str:
     """Small dependency-free Markdown table formatter."""
     if df.empty:
@@ -482,7 +552,7 @@ def main():
     parser.add_argument(
         "--skip-overview",
         action="store_true",
-        help="Generate only the four standalone plots",
+        help="Skip the four-panel overview figure",
     )
     parser.add_argument("--k", type=int, default=4, help="Number of nearest neighbours")
     parser.add_argument("--permutations", type=int, default=999)
@@ -500,7 +570,7 @@ def main():
         unit_label = "Planning Area"
         unit_label_plural = "planning areas"
         unit_slug = "planning_area"
-        default_output_dir = Path("output/spatial_autocorrelation_nursery_fee")
+        default_output_dir = Path("output/spatial_autocorrelation_nursery_fee_planning_area")
 
     if args.output_dir is None:
         args.output_dir = default_output_dir
@@ -561,6 +631,18 @@ def main():
 
     save_individual_plot(lambda ax: draw_fee_map(ax, subzones, area_df, unit_label), args.output_dir / "nursery_fee_choropleth.png")
     save_individual_plot(
+        lambda ax: draw_global_moran_cluster_map(
+            ax,
+            subzones,
+            area_df,
+            observed_i,
+            expected_i,
+            global_p,
+            unit_label,
+        ),
+        args.output_dir / "global_moran_cluster_map.png",
+    )
+    save_individual_plot(
         lambda ax: draw_moran_scatter(
             ax,
             z,
@@ -574,6 +656,15 @@ def main():
     )
     save_individual_plot(lambda ax: draw_permutation(ax, global_perm, observed_i, expected_i, global_p), args.output_dir / "global_moran_permutation.png")
     save_individual_plot(lambda ax: draw_lisa_map(ax, subzones, area_df, unit_label), args.output_dir / "local_moran_lisa_map.png")
+    save_global_lisa_comparison(
+        args.output_dir / "global_moran_clusters_lisa_side_by_side.png",
+        subzones,
+        area_df,
+        observed_i,
+        expected_i,
+        global_p,
+        unit_label,
+    )
 
     if not args.skip_overview:
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
