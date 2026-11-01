@@ -4,6 +4,14 @@ Settled methodological decisions, so they are not re-opened by accident. Newest 
 says what was decided, the evidence, and who confirmed it. Open questions stay in the project
 CLAUDE.md "Open decisions" list until they land here.
 
+## 2026-10-30 — Demand age band is 0–4 plus 40% of 5–9 (children below 7)
+
+**Decision.** Childcare demand counts children aged 0–6. From the 5-year SingStat bands this is
+ages 0–4 plus 40% of ages 5–9. **Confirmed by** the prof on 2026-10-30. The SingStat single-year
+table (`data/SubzoneSingleYearAge_2026.csv`) gives the exact per-subzone share of 5–6 within 5–9
+(33–44%, national 38.8%), which may be used instead of the flat 40%; whichever is used, the other is
+a one-line robustness check.
+
 ## 2026-10-30 — Bus stops are not used; MRT exit walk time is kept as a covariate
 
 **Decision.** Walking time to the nearest bus stop is **not** computed for the full block set and is
