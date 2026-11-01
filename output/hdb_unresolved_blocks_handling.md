@@ -68,7 +68,7 @@ The neighbours for 63 and 40 are near-identical blocks; the estimate for 82 is r
 - **116 Pasir Ris structures**: Pasir Ris Heights (55), Terrace (40), Avenue (15),
   Road (6). None of these streets appears in Property Information 2026, the footprints are
   small (median 96 m² against roughly 600–1,500 m² for a flat block) and most polygons were
-  last updated in 2013. They are not treated as flat blocks.
+  last updated in 2013. They are not treated as flat blocks. Verified that they are landed properties through google search.
 - **87 Jalan Satu**: Mountbatten Community Club (see §2).
 
 Excluded blocks have null attributes and `is_residential = False`, so they carry no demand.
