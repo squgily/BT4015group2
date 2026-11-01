@@ -414,6 +414,79 @@ def plot_bandwidth_selection(results: pd.DataFrame, output_path: Path) -> None:
     plt.close(fig)
 
 
+def plot_local_regression_lines(
+    data: pd.DataFrame,
+    ols: dict[str, np.ndarray | float],
+    output_path: Path,
+) -> None:
+    """Overlay the 30 planning-area GWR lines on the observed data."""
+    income = data["estimated_median_income_sgd"].to_numpy(dtype=float)
+    fee = data["median_fee_sgd"].to_numpy(dtype=float)
+    income_grid = np.linspace(float(income.min()), float(income.max()), 250)
+    income_grid_thousands = income_grid / 1_000
+
+    ordered = data.sort_values("planning_area_name").reset_index(drop=True)
+    colours = plt.colormaps["turbo"](np.linspace(0.02, 0.98, len(ordered)))
+    fig, ax = plt.subplots(figsize=(16, 9.5))
+
+    for colour, row in zip(colours, ordered.itertuples()):
+        local_line = (
+            row.local_intercept_sgd
+            + row.local_income_slope_sgd_per_1000 * income_grid_thousands
+        )
+        ax.plot(
+            income_grid,
+            local_line,
+            color=colour,
+            linewidth=1.55,
+            alpha=0.78,
+            label=row.planning_area_name,
+        )
+        ax.scatter(
+            row.estimated_median_income_sgd,
+            row.median_fee_sgd,
+            s=28,
+            color=colour,
+            edgecolor="white",
+            linewidth=0.45,
+            zorder=3,
+        )
+
+    ax.plot(
+        income_grid,
+        float(ols["intercept"]) + float(ols["slope"]) * income_grid_thousands,
+        color="#111111",
+        linewidth=2.8,
+        linestyle="--",
+        label="Global OLS",
+        zorder=4,
+    )
+    ax.set_title(
+        "Local GWR Income x Nursery Fees by Planning Area",
+        fontsize=16,
+        fontweight="bold",
+        pad=12,
+    )
+    ax.set_xlabel("Estimated Median Monthly Household Income (SGD)")
+    ax.set_ylabel("Predicted Median Monthly Nursery Fee (SGD)")
+    ax.grid(color="#E4E4E4", linewidth=0.7)
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.legend(
+        title="Planning area (point = observed value)",
+        loc="center left",
+        bbox_to_anchor=(1.01, 0.5),
+        ncol=2,
+        frameon=False,
+        fontsize=8.2,
+        title_fontsize=9.5,
+        handlelength=2.5,
+        columnspacing=1.2,
+    )
+    fig.tight_layout(rect=(0.04, 0.04, 0.78, 1))
+    fig.savefig(output_path, dpi=240, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
 def write_summary(
     path: Path,
     data: pd.DataFrame,
@@ -633,6 +706,11 @@ def main() -> None:
     plot_fit_maps(data, subzones, args.output_dir / "gwr_fit_maps.png")
     plot_bandwidth_selection(
         bandwidth_results, args.output_dir / "gwr_bandwidth_selection.png"
+    )
+    plot_local_regression_lines(
+        data,
+        ols,
+        args.output_dir / "gwr_local_regression_lines.png",
     )
     write_summary(
         args.output_dir / "gwr_analysis_summary.md",
