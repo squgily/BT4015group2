@@ -4,6 +4,18 @@ Settled methodological decisions, so they are not re-opened by accident. Newest 
 says what was decided, the evidence, and who confirmed it. Open questions stay in the project
 CLAUDE.md "Open decisions" list until they land here.
 
+## 2026-11-02 — LISA on the pressure index: minimum 100 children 0–6 per subzone, tested 0–200
+
+**Decision.** The local Moran's I on log pressure is run on HDB subzones with at least 100 children
+aged 0–6 (140 of 157), about six blocks' worth, so a subzone's pressure rests on more than a couple
+of blocks. The cut-off is a judgment, so it was tested (`scripts/lisa_threshold_sensitivity.py`,
+`output/lisa_threshold_sensitivity.csv`): clustering is significant at every threshold (I = +0.18 to
++0.35, p ≤ 0.002) and seven subzones are high-high at every threshold from 50 to 200 — Garden,
+Plantation, Park, Brickworks, Hong Kah North, Punggol Town Centre, Waterway East. Matilda and Yuhua
+West drop out at 200; Woodgrove is high-high only at 100 and is treated as marginal. With no cut-off
+the 17 tiny central subzones (2–18 blocks) inflate the global statistic. **Decided by** Minh,
+2026-11-02.
+
 ## 2026-11-02 — Supply-pressure index: 10-minute binary catchment, one unit per centre
 
 **Decision.** The reframed H-c measure is a two-step floating catchment (2SFCA) index: for each

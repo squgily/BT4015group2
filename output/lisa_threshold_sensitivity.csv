@@ -1,0 +1,5 @@
+min_children_0_6,n_subzones,islands_patched,morans_I,p_sim,n_HH,n_LL,n_HL,n_LH,HH_subzones
+0,157,"Teban Gardens, Marine Parade",0.354,0.0001,13,10,1,5,Brickworks; Garden; Guilin; Hong Kah North; Jelebu; Matilda; North Coast; Park; Plantation; Punggol Field; Punggol Town Centre; Waterway East; Yuhua West
+50,150,"Teban Gardens, Farrer Court, Marine Parade",0.205,0.0005,10,6,4,4,Brickworks; Garden; Hong Kah North; Matilda; North Coast; Park; Plantation; Punggol Town Centre; Waterway East; Yuhua West
+100,140,"Teban Gardens, Marine Parade",0.176,0.0018,10,4,3,4,Brickworks; Garden; Hong Kah North; Matilda; Park; Plantation; Punggol Town Centre; Waterway East; Woodgrove; Yuhua West
+200,133,"Chinatown, Teban Gardens, Marine Parade",0.202,0.0013,7,5,2,5,Brickworks; Garden; Hong Kah North; Park; Plantation; Punggol Town Centre; Waterway East
