@@ -43,7 +43,7 @@ FIGS.mkdir(exist_ok=True)
 
 # ── Tuneable parameters ────────────────────────────────────────────────────────
 GRID_RES     = 100     # grid cell size in metres
-BW_M         = 1200   # Gaussian smoothing bandwidth (sigma) in metres
+BW_M         = 800    # Gaussian smoothing bandwidth (sigma) in metres
 FLAT_SHARE   = 0.40   # fraction of 5–9 band counted as 5–6
 MIN_FRAC     = 0.002  # cells below this fraction of peak are set to NaN (transparent)
 
