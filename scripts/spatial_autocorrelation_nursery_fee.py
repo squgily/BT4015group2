@@ -26,7 +26,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.colors import BoundaryNorm, ListedColormap
+from matplotlib.colors import BoundaryNorm, ListedColormap, Normalize
 from matplotlib.patches import Patch, Polygon as MplPolygon
 from matplotlib.collections import LineCollection, PatchCollection
 import numpy as np
@@ -285,10 +285,12 @@ def planning_area_boundary_segments(subzones: list[dict]) -> list[list[tuple[flo
     ]
 
 
-def add_planning_area_boundaries(ax, subzones):
+def add_planning_area_boundaries(
+    ax, subzones, color="#f5f5f5", linewidth=0.55
+):
     boundaries = planning_area_boundary_segments(subzones)
     ax.add_collection(
-        LineCollection(boundaries, colors="#f5f5f5", linewidths=0.55, zorder=3)
+        LineCollection(boundaries, colors=color, linewidths=linewidth, zorder=3)
     )
 
 
@@ -297,23 +299,86 @@ def set_map_style(ax):
     ax.set_axis_off()
 
 
+FEE_BOUNDS = np.asarray([600, 620, 640, 700, 1200, 1700, 2200, 3000], dtype=float)
+FEE_BIN_LABELS = [
+    "S$600–619",
+    "S$620–639",
+    "S$640–699",
+    "S$700–1,199",
+    "S$1,200–1,699",
+    "S$1,700–2,199",
+    "S$2,200–2,999",
+]
+
+
 def draw_fee_map(ax, subzones, area_df, spatial_unit_label="Planning Area"):
     lookup = dict(zip(area_df["planning_area"], area_df["median_fee_sgd"]))
     patches, values = feature_patches(subzones, lookup)
-    # Reverse viridis so higher (more expensive) fees use darker colours.
-    collection = PatchCollection(patches, cmap="viridis_r", edgecolor="none", linewidth=0)
+    is_planning_area = spatial_unit_label == "Planning Area"
+    if is_planning_area:
+        # Planning-area values are repeated over their constituent subzone
+        # pieces.  Suppressing polygon edges and drawing only the dissolved
+        # planning-area outline makes those pieces read as one merged area.
+        cmap = plt.cm.Blues.copy()
+        norm = Normalize(
+            vmin=float(np.nanmin(values)),
+            vmax=float(np.nanmax(values)),
+        )
+        edgecolor = "none"
+        linewidth = 0
+    else:
+        # Preserve the enhanced stepped scale on the more granular subzone map.
+        blue_shades = plt.cm.Blues(np.linspace(0.25, 0.95, len(FEE_BIN_LABELS)))
+        cmap = ListedColormap(blue_shades, name="nursery_fee_blues")
+        norm = BoundaryNorm(FEE_BOUNDS, cmap.N, clip=True)
+        edgecolor = "white"
+        linewidth = 0.25
+    cmap.set_bad("#e0e0e0")
+    collection = PatchCollection(
+        patches,
+        cmap=cmap,
+        norm=norm,
+        edgecolor=edgecolor,
+        linewidth=linewidth,
+    )
     collection.set_antialiased(False)
     collection.set_array(np.ma.masked_invalid(values))
     ax.add_collection(collection)
-    add_planning_area_boundaries(ax, subzones)
+    add_planning_area_boundaries(
+        ax,
+        subzones,
+        color="#ffffff" if is_planning_area else "#f5f5f5",
+        linewidth=0.8 if is_planning_area else 0.55,
+    )
     ax.autoscale_view()
     set_map_style(ax)
-    ax.set_title(
-        f"Median Full-Day SC Nursery Fee by {spatial_unit_label}",
-        fontweight="bold",
-    )
-    cbar = ax.figure.colorbar(collection, ax=ax, fraction=0.032, pad=0.01)
-    cbar.set_label("Median monthly fee (SGD)")
+    title = f"Median Full-Day SC Nursery Fee by {spatial_unit_label}"
+    if is_planning_area:
+        title += "\n(median monthly fee, SGD)"
+    ax.set_title(title, fontweight="bold", pad=11 if is_planning_area else None)
+    if is_planning_area:
+        # Match the child-density choropleth's narrow continuous scale and
+        # map-to-legend proportions.
+        cbar = ax.figure.colorbar(collection, ax=ax, fraction=0.032, pad=0.01)
+        cbar.set_label("Median monthly nursery fee (SGD)")
+    else:
+        tick_positions = (FEE_BOUNDS[:-1] + FEE_BOUNDS[1:]) / 2
+        cbar = ax.figure.colorbar(
+            collection,
+            ax=ax,
+            boundaries=FEE_BOUNDS,
+            ticks=tick_positions,
+            fraction=0.05,
+            pad=0.018,
+            spacing="uniform",
+            drawedges=True,
+        )
+        cbar.ax.set_yticklabels(FEE_BIN_LABELS)
+        cbar.ax.tick_params(labelsize=8, length=0, pad=5)
+        cbar.set_label("Median monthly nursery fee", fontweight="bold", labelpad=10)
+        cbar.outline.set_linewidth(0.8)
+        cbar.dividers.set_color("white")
+        cbar.dividers.set_linewidth(0.8)
     return collection
 
 
@@ -629,7 +694,12 @@ def main():
     except PermissionError:
         print("Warning: permutation CSV is open/locked; retained the existing copy.")
 
-    save_individual_plot(lambda ax: draw_fee_map(ax, subzones, area_df, unit_label), args.output_dir / "nursery_fee_choropleth.png")
+    fee_map_figsize = (9, 6.3) if args.spatial_unit == "planning_area" else (9, 7)
+    save_individual_plot(
+        lambda ax: draw_fee_map(ax, subzones, area_df, unit_label),
+        args.output_dir / "nursery_fee_choropleth.png",
+        figsize=fee_map_figsize,
+    )
     save_individual_plot(
         lambda ax: draw_global_moran_cluster_map(
             ax,

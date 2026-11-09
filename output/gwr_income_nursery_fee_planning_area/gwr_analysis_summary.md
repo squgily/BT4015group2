@@ -27,7 +27,23 @@ The GWR model **moderately improves** on global OLS by the conventional AICc com
 - Local slope range: **$5.3 to $124.9** change in median fee per additional SGD 1,000 of median income.
 - Median local slope: **$104.1 per SGD 1,000**.
 - Positive local slopes: **30 of 30** planning areas.
-- Areas with |local t| >= 1.96: **21**. These are exploratory pointwise results and are not adjusted for multiple testing.
+- Effective residual degrees of freedom used for approximate local t-tests: **19.24**.
+- Areas with unadjusted two-sided p <= 0.05: **21**.
+- Areas remaining significant at 5% after Benjamini-Hochberg FDR correction across the 30 income-slope tests: **21**.
+- The smallest non-significant adjusted income-slope p-value is **0.571**.
+
+### Monte Carlo spatial-variability test
+
+- H0: the coefficient is spatially stationary; its observed across-area variability is no greater than expected after randomly reassigning locations.
+- H1: the coefficient exhibits greater spatial variability than expected under random location assignment.
+- Method: **999 coordinate randomisations**, refitting GWR each time at the fixed, selected bandwidth of **14 neighbours**. The test statistic is the sample standard deviation of the local coefficients, and the pseudo p-value uses the upper tail with the plus-one correction.
+
+| Parameter | Observed SD | Null mean SD | Null 95th percentile | Pseudo p-value | Decision at 5% |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Intercept | 302.87 | 263.54 | 376.82 | 0.292 | fail to reject H0 |
+| Income slope | 44.96 | 34.30 | 51.28 | 0.164 | fail to reject H0 |
+
+The income-slope test is the primary test of the research hypothesis. Local t-values test whether individual coefficients differ from zero; they do **not** test whether the coefficient varies significantly across space.
 
 Strongest local coefficients:
 
