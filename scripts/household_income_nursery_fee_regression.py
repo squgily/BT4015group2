@@ -188,8 +188,6 @@ def plot_scatter(
     boot_intercept: np.ndarray,
     boot_slope: np.ndarray,
     theil_sen: tuple[float, float],
-    pearson: float,
-    pearson_p: float,
     output_path: Path,
 ) -> None:
     x = data["estimated_median_income_sgd"].to_numpy() / 1_000.0
@@ -235,18 +233,6 @@ def plot_scatter(
             ha="right" if offset[0] < 0 else "left",
         )
 
-    ax.text(
-        0.025,
-        0.965,
-        f"n = {len(data)} planning areas\n"
-        f"Fee change per SGD 1,000 income = SGD {float(model['slope']):,.1f}\n"
-        f"R² = {float(model['r_squared']):.3f}\n"
-        f"Pearson r = {pearson:.3f} (p = {pearson_p:.4f})",
-        transform=ax.transAxes,
-        va="top",
-        fontsize=10,
-        bbox={"boxstyle": "round,pad=0.45", "facecolor": "white", "edgecolor": "#BBBBBB", "alpha": 0.94},
-    )
     ax.set_title(
         "Median Household Income and Nursery Fees by Planning Area",
         fontsize=16,
@@ -454,8 +440,6 @@ def main() -> None:
         boot_intercept,
         boot_slope,
         theil_sen,
-        pearson,
-        pearson_p,
         args.output_dir / "income_nursery_fee_regression.png",
     )
     print(f"Matched planning areas: {len(data)}")

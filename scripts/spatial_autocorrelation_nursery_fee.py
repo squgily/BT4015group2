@@ -12,7 +12,7 @@ Outputs (under the spatial-unit-specific output directory):
   - global_moran_scatterplot.png
   - global_moran_permutation.png
   - local_moran_lisa_map.png
-  - global_moran_clusters_lisa_side_by_side.png
+  - global_moran_clusters_lisa_side_by_side.png (subzone analysis only)
   - spatial_autocorrelation_overview.png
 """
 
@@ -725,16 +725,23 @@ def main():
         args.output_dir / "global_moran_scatterplot.png",
     )
     save_individual_plot(lambda ax: draw_permutation(ax, global_perm, observed_i, expected_i, global_p), args.output_dir / "global_moran_permutation.png")
-    save_individual_plot(lambda ax: draw_lisa_map(ax, subzones, area_df, unit_label), args.output_dir / "local_moran_lisa_map.png")
-    save_global_lisa_comparison(
-        args.output_dir / "global_moran_clusters_lisa_side_by_side.png",
-        subzones,
-        area_df,
-        observed_i,
-        expected_i,
-        global_p,
-        unit_label,
+    save_individual_plot(
+        lambda ax: draw_lisa_map(ax, subzones, area_df, unit_label),
+        args.output_dir / "local_moran_lisa_map.png",
     )
+    # Planning-area maps are presentation outputs in their own right, so keep
+    # them as two separate figures. Retain the comparison figure for the more
+    # granular subzone analysis where it remains useful.
+    if args.spatial_unit == "subzone":
+        save_global_lisa_comparison(
+            args.output_dir / "global_moran_clusters_lisa_side_by_side.png",
+            subzones,
+            area_df,
+            observed_i,
+            expected_i,
+            global_p,
+            unit_label,
+        )
 
     if not args.skip_overview:
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
