@@ -36,16 +36,16 @@ The area-level median fees show **positive spatial autocorrelation**, and the re
 | RIVER VALLEY | 2100.0000 | 7.0000 | High-High | 1.0605 | 0.0060 | 0.0305 |
 | TANGLIN | 2291.0000 | 11.0000 | High-High | 1.4353 | 0.0070 | 0.0305 |
 | DOWNTOWN CORE | 2350.0000 | 18.0000 | High-High | 1.5964 | 0.0080 | 0.0305 |
-| MANDAI | 1815.0000 | 2.0000 | High-Low | -0.6342 | 0.0410 | 0.1062 |
+| MANDAI | 1815.0000 | 2.0000 | High-Low | -0.6342 | 0.0340 | 0.0945 |
 | OUTRAM | 975.0000 | 8.0000 | Low-High | -0.4416 | 0.0010 | 0.0140 |
 | BUKIT MERAH | 650.0000 | 43.0000 | Low-High | -0.7789 | 0.0080 | 0.0305 |
 | SELETAR | 650.0000 | 1.0000 | Low-Low | 0.6293 | 0.0020 | 0.0140 |
 | HOUGANG | 650.0000 | 70.0000 | Low-Low | 0.5490 | 0.0120 | 0.0420 |
 | BUKIT BATOK | 650.0000 | 58.0000 | Low-Low | 0.5308 | 0.0200 | 0.0646 |
 | SERANGOON | 1000.0000 | 45.0000 | Low-Low | 0.2398 | 0.0270 | 0.0810 |
-| JURONG EAST | 650.0000 | 33.0000 | Low-Low | 0.6187 | 0.0360 | 0.1008 |
-| TENGAH | 610.0000 | 14.0000 | Low-Low | 0.5465 | 0.0430 | 0.1062 |
-| WESTERN WATER CATCHMENT | 1200.0000 | 2.0000 | Low-Low | 0.0246 | 0.0470 | 0.1083 |
-| SENGKANG | 610.0000 | 90.0000 | Low-Low | 0.5801 | 0.0490 | 0.1083 |
+| JURONG EAST | 650.0000 | 33.0000 | Low-Low | 0.6187 | 0.0360 | 0.0945 |
+| TENGAH | 610.0000 | 14.0000 | Low-Low | 0.5465 | 0.0430 | 0.1039 |
+| SENGKANG | 610.0000 | 90.0000 | Low-Low | 0.5801 | 0.0470 | 0.1039 |
+| WESTERN WATER CATCHMENT | 1200.0000 | 2.0000 | Low-Low | 0.0246 | 0.0470 | 0.1039 |
 
 Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05` when confirmatory control of false discoveries is required. Results describe planning area medians, not individual-centre fee similarity.

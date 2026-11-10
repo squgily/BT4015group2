@@ -528,11 +528,6 @@ def plot_local_regression_lines(
     fee = data["median_fee_sgd"].to_numpy(dtype=float)
     income_grid = np.linspace(float(income.min()), float(income.max()), 250)
     income_grid_thousands = income_grid / 1_000
-    gwr_residual = fee - data["gwr_fitted_fee_sgd"].to_numpy(dtype=float)
-    gwr_r_squared = 1 - float(gwr_residual @ gwr_residual) / float(
-        ((fee - fee.mean()) ** 2).sum()
-    )
-
     ordered = data.sort_values("planning_area_name").reset_index(drop=True)
     colours = plt.colormaps["turbo"](np.linspace(0.02, 0.98, len(ordered)))
     fig, ax = plt.subplots(figsize=(16, 9.5))
@@ -579,23 +574,6 @@ def plot_local_regression_lines(
     ax.set_ylabel("Predicted Median Monthly Nursery Fee (SGD)")
     ax.grid(color="#E4E4E4", linewidth=0.7)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.text(
-        0.025,
-        0.965,
-        f"Global OLS R\N{SUPERSCRIPT TWO} = {float(ols['r_squared']):.3f}\n"
-        f"Overall GWR R\N{SUPERSCRIPT TWO} = {gwr_r_squared:.3f}",
-        transform=ax.transAxes,
-        ha="left",
-        va="top",
-        fontsize=10.5,
-        bbox={
-            "boxstyle": "round,pad=0.45",
-            "facecolor": "white",
-            "edgecolor": "#777777",
-            "alpha": 0.94,
-        },
-        zorder=6,
-    )
     ax.legend(
         title="Planning area (point = observed value)",
         loc="center left",
