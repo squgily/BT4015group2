@@ -2,7 +2,7 @@
 
 ## Method
 
-- Source points: `data/ChildCareServices_2021.geojson`; null/non-numeric `FULL_DAY_SC_NURSERY_FEE` records excluded.
+- Source points: `output/childcare_centres_2026.gpkg` layer `centres` (canonical 2026 layer); null `FULL_DAY_SC_NURSERY_FEE` records and the one S$0 fee excluded.
 - Spatial unit: 2019 subzones (`SUBZONE_N`) from `data/MasterPlanSubZones_2019.geojson`.
 - Area statistic: median centre fee in SGD. The centre count and mean are retained for context.
 - Spatial weights: symmetric 4-nearest-neighbour graph based on area-weighted subzone centroids, row-standardised.
@@ -10,16 +10,16 @@
 
 ## Data coverage
 
-- Centre features: 1,925
-- Excluded null/invalid fees: 562
+- Centre features: 1,796
+- Excluded null/invalid fees: 210
 - Valid fee points outside a subzone polygon: 0
-- Centres analysed: 1,363
-- Subzones with at least one valid centre: 210
+- Centres analysed: 1,586
+- Subzones with at least one valid centre: 232
 
 ## Global Moran's I
 
-- Observed I: **0.3757**
-- Randomisation expectation: **-0.0048**
+- Observed I: **0.4455**
+- Randomisation expectation: **-0.0043**
 - Permutation pseudo-p: **0.0010**
 
 The area-level median fees show **positive spatial autocorrelation**, and the result is **statistically significant at the 5% level** under this weights specification.
@@ -28,51 +28,73 @@ The area-level median fees show **positive spatial autocorrelation**, and the re
 
 | subzone | median_fee_sgd | centre_count | lisa_cluster_p05 | local_moran_i | local_permutation_p | local_fdr_q |
 | --- | --- | --- | --- | --- | --- | --- |
-| BOULEVARD | 2480.0000 | 3.0000 | High-High | 5.4440 | 0.0010 | 0.0210 |
-| CAIRNHILL | 2200.0000 | 1.0000 | High-High | 4.6873 | 0.0010 | 0.0210 |
-| GOODWOOD PARK | 2105.0000 | 2.0000 | High-High | 3.4098 | 0.0010 | 0.0210 |
-| HOLLAND ROAD | 2175.0000 | 2.0000 | High-High | 2.9504 | 0.0010 | 0.0210 |
-| LEONIE HILL | 2520.0000 | 2.0000 | High-High | 6.0435 | 0.0010 | 0.0210 |
-| NASSIM | 1883.0000 | 4.0000 | High-High | 3.0018 | 0.0010 | 0.0210 |
-| NEWTON CIRCUS | 2370.0000 | 1.0000 | High-High | 4.0451 | 0.0010 | 0.0210 |
-| OXLEY | 2950.0000 | 2.0000 | High-High | 6.9461 | 0.0010 | 0.0210 |
-| SWISS CLUB | 1930.0000 | 5.0000 | High-High | 3.4674 | 0.0010 | 0.0210 |
-| CORONATION ROAD | 2200.0000 | 5.0000 | High-High | 3.8030 | 0.0020 | 0.0323 |
-| MALCOLM | 1580.0000 | 1.0000 | High-High | 1.7378 | 0.0020 | 0.0323 |
-| ROBERTSON QUAY | 1990.0000 | 2.0000 | High-High | 2.5024 | 0.0020 | 0.0323 |
-| MOUNT EMILY | 1980.0000 | 2.0000 | High-High | 2.7301 | 0.0040 | 0.0560 |
-| HILLCREST | 2085.6250 | 4.0000 | High-High | 3.2942 | 0.0050 | 0.0618 |
-| INSTITUTION HILL | 2470.0000 | 1.0000 | High-High | 3.2897 | 0.0080 | 0.0840 |
-| ANAK BUKIT | 1500.0000 | 12.0000 | High-High | 0.9206 | 0.0200 | 0.1378 |
-| FARRER COURT | 2000.0000 | 1.0000 | High-High | 1.5684 | 0.0210 | 0.1378 |
-| VICTORIA | 1925.0000 | 2.0000 | High-High | 1.9011 | 0.0230 | 0.1464 |
-| MOULMEIN | 1608.2250 | 2.0000 | High-High | 1.2240 | 0.0250 | 0.1544 |
-| SELETAR | 1900.0000 | 1.0000 | High-Low | -1.0656 | 0.0010 | 0.0210 |
-| WOODLANDS REGIONAL CENTRE | 1125.0000 | 2.0000 | High-Low | -0.1447 | 0.0040 | 0.0560 |
-| PASIR RIS PARK | 1650.0000 | 2.0000 | High-Low | -0.7496 | 0.0350 | 0.1758 |
-| TEBAN GARDENS | 610.0000 | 7.0000 | Low-High | -0.7396 | 0.0210 | 0.1378 |
-| CRAWFORD | 610.0000 | 3.0000 | Low-High | -0.7525 | 0.0280 | 0.1633 |
-| MARINE PARADE | 630.0000 | 8.0000 | Low-High | -0.5937 | 0.0300 | 0.1658 |
-| BUKIT HO SWEE | 610.0000 | 4.0000 | Low-High | -0.5993 | 0.0360 | 0.1758 |
-| YUHUA WEST | 610.0000 | 3.0000 | Low-Low | 0.4637 | 0.0050 | 0.0618 |
-| PUNGGOL FIELD | 610.0000 | 16.0000 | Low-Low | 0.4558 | 0.0080 | 0.0840 |
-| SENGKANG TOWN CENTRE | 610.0000 | 24.0000 | Low-Low | 0.4637 | 0.0080 | 0.0840 |
-| BUKIT BATOK WEST | 610.0000 | 5.0000 | Low-Low | 0.4566 | 0.0130 | 0.1225 |
-| COMPASSVALE | 610.0000 | 7.0000 | Low-Low | 0.4637 | 0.0130 | 0.1225 |
-| RIVERVALE | 610.0000 | 19.0000 | Low-Low | 0.4637 | 0.0140 | 0.1225 |
-| TAMAN JURONG | 610.0000 | 13.0000 | Low-Low | 0.4542 | 0.0140 | 0.1225 |
-| TOWNSVILLE | 610.0000 | 8.0000 | Low-Low | 0.4542 | 0.0150 | 0.1260 |
-| FAJAR | 610.0000 | 10.0000 | Low-Low | 0.4637 | 0.0160 | 0.1292 |
-| BALESTIER | 650.0000 | 14.0000 | Low-Low | 0.4077 | 0.0190 | 0.1378 |
-| NORTHSHORE | 650.0000 | 4.0000 | Low-Low | 0.4163 | 0.0200 | 0.1378 |
-| SENJA | 610.0000 | 3.0000 | Low-Low | 0.4479 | 0.0210 | 0.1378 |
-| CHOA CHU KANG NORTH | 650.0000 | 10.0000 | Low-Low | 0.4077 | 0.0280 | 0.1633 |
-| SEMBAWANG CENTRAL | 610.0000 | 16.0000 | Low-Low | 0.4542 | 0.0300 | 0.1658 |
-| HONG KAH | 610.0000 | 19.0000 | Low-Low | 0.4577 | 0.0330 | 0.1758 |
-| TRAFALGAR | 610.0000 | 16.0000 | Low-Low | 0.4494 | 0.0350 | 0.1758 |
-| BRICKWORKS | 610.0000 | 10.0000 | Low-Low | 0.4518 | 0.0360 | 0.1758 |
-| BOON LAY PLACE | 610.0000 | 9.0000 | Low-Low | 0.4400 | 0.0390 | 0.1861 |
-| SAUJANA | 610.0000 | 7.0000 | Low-Low | 0.4542 | 0.0430 | 0.2007 |
-| BUKIT BATOK CENTRAL | 640.0000 | 7.0000 | Low-Low | 0.4150 | 0.0490 | 0.2229 |
+| BOULEVARD | 2480.0000 | 3.0000 | High-High | 3.7625 | 0.0010 | 0.0258 |
+| CAIRNHILL | 2200.0000 | 1.0000 | High-High | 3.3686 | 0.0010 | 0.0258 |
+| CLIFFORD PIER | 2450.0000 | 1.0000 | High-High | 3.2752 | 0.0010 | 0.0258 |
+| GOODWOOD PARK | 2129.5000 | 2.0000 | High-High | 2.1279 | 0.0010 | 0.0258 |
+| LEONIE HILL | 3355.0000 | 2.0000 | High-High | 4.5898 | 0.0010 | 0.0258 |
+| MALCOLM | 1580.0000 | 1.0000 | High-High | 0.9980 | 0.0010 | 0.0258 |
+| MARINA CENTRE | 2325.0000 | 4.0000 | High-High | 3.7366 | 0.0010 | 0.0258 |
+| MARINA SOUTH | 3010.0000 | 1.0000 | High-High | 5.3548 | 0.0010 | 0.0258 |
+| NEWTON CIRCUS | 2370.0000 | 1.0000 | High-High | 2.5766 | 0.0010 | 0.0258 |
+| CENTRAL SUBZONE | 2500.0000 | 1.0000 | High-High | 2.9181 | 0.0020 | 0.0387 |
+| OXLEY | 2059.1750 | 4.0000 | High-High | 2.5047 | 0.0020 | 0.0387 |
+| RAFFLES PLACE | 2470.0000 | 3.0000 | High-High | 3.0846 | 0.0020 | 0.0387 |
+| BOAT QUAY | 2200.0000 | 1.0000 | High-High | 2.0578 | 0.0030 | 0.0409 |
+| CITY HALL | 3000.0000 | 1.0000 | High-High | 4.4509 | 0.0030 | 0.0409 |
+| HILLCREST | 1946.5000 | 6.0000 | High-High | 1.8575 | 0.0030 | 0.0409 |
+| SWISS CLUB | 2224.7700 | 3.0000 | High-High | 2.3485 | 0.0030 | 0.0409 |
+| VICTORIA | 1925.0000 | 2.0000 | High-High | 1.3015 | 0.0060 | 0.0663 |
+| NASSIM | 2016.0000 | 5.0000 | High-High | 1.9057 | 0.0070 | 0.0738 |
+| HOLLAND ROAD | 2050.0000 | 3.0000 | High-High | 1.6029 | 0.0080 | 0.0807 |
+| INSTITUTION HILL | 1720.0000 | 1.0000 | High-High | 1.1549 | 0.0100 | 0.0928 |
+| CORONATION ROAD | 2200.0000 | 5.0000 | High-High | 2.0680 | 0.0120 | 0.1024 |
+| ANSON | 1800.0000 | 1.0000 | High-High | 0.9971 | 0.0150 | 0.1024 |
+| CHATSWORTH | 1821.5300 | 2.0000 | High-High | 1.0499 | 0.0220 | 0.1187 |
+| DUNEARN | 2345.0000 | 2.0000 | High-High | 1.9666 | 0.0260 | 0.1206 |
+| MOULMEIN | 2080.0000 | 7.0000 | High-High | 1.3570 | 0.0330 | 0.1409 |
+| FARRER COURT | 2000.0000 | 1.0000 | High-High | 1.0110 | 0.0340 | 0.1409 |
+| ROBERTSON QUAY | 2200.0000 | 3.0000 | High-High | 1.3147 | 0.0370 | 0.1431 |
+| CLEANTECH | 1750.0000 | 1.0000 | High-Low | -0.6900 | 0.0150 | 0.1024 |
+| BRADDELL | 1760.0000 | 4.0000 | High-Low | -0.6366 | 0.0370 | 0.1431 |
+| PHILLIP | 650.0000 | 1.0000 | Low-High | -0.9486 | 0.0030 | 0.0409 |
+| GHIM MOH | 650.0000 | 5.0000 | Low-High | -0.6939 | 0.0240 | 0.1206 |
+| TEBAN GARDENS | 650.0000 | 5.0000 | Low-High | -0.7001 | 0.0430 | 0.1512 |
+| HENDERSON HILL | 610.0000 | 2.0000 | Low-High | -0.7003 | 0.0470 | 0.1604 |
+| SELETAR | 650.0000 | 1.0000 | Low-Low | 0.6004 | 0.0040 | 0.0516 |
+| PARK | 610.0000 | 5.0000 | Low-Low | 0.6399 | 0.0060 | 0.0663 |
+| WOODLANDS REGIONAL CENTRE | 650.0000 | 3.0000 | Low-Low | 0.5836 | 0.0060 | 0.0663 |
+| PUNGGOL FIELD | 630.0000 | 16.0000 | Low-Low | 0.6108 | 0.0090 | 0.0870 |
+| MATILDA | 630.0000 | 12.0000 | Low-Low | 0.6108 | 0.0120 | 0.1024 |
+| FAJAR | 650.0000 | 9.0000 | Low-Low | 0.5948 | 0.0130 | 0.1024 |
+| MIDVIEW | 630.0000 | 12.0000 | Low-Low | 0.5991 | 0.0140 | 0.1024 |
+| YUHUA WEST | 755.0000 | 2.0000 | Low-Low | 0.4582 | 0.0140 | 0.1024 |
+| SAUJANA | 650.0000 | 9.0000 | Low-Low | 0.5881 | 0.0150 | 0.1024 |
+| SENJA | 610.0000 | 6.0000 | Low-Low | 0.6141 | 0.0150 | 0.1024 |
+| CHOA CHU KANG NORTH | 650.0000 | 11.0000 | Low-Low | 0.5836 | 0.0160 | 0.1061 |
+| NORTHSHORE | 610.0000 | 15.0000 | Low-Low | 0.6423 | 0.0170 | 0.1066 |
+| PUNGGOL TOWN CENTRE | 610.0000 | 12.0000 | Low-Low | 0.6351 | 0.0170 | 0.1066 |
+| BALESTIER | 650.0000 | 10.0000 | Low-Low | 0.5948 | 0.0180 | 0.1099 |
+| TOWNSVILLE | 610.0000 | 6.0000 | Low-Low | 0.6302 | 0.0210 | 0.1187 |
+| COMPASSVALE | 650.0000 | 9.0000 | Low-Low | 0.5881 | 0.0220 | 0.1187 |
+| PENG SIANG | 630.0000 | 10.0000 | Low-Low | 0.6069 | 0.0220 | 0.1187 |
+| WATERWAY EAST | 610.0000 | 21.0000 | Low-Low | 0.6363 | 0.0220 | 0.1187 |
+| PLANTATION | 610.0000 | 4.0000 | Low-Low | 0.6131 | 0.0230 | 0.1206 |
+| BRICKWORKS | 610.0000 | 12.0000 | Low-Low | 0.6254 | 0.0250 | 0.1206 |
+| GREENWOOD PARK | 650.0000 | 1.0000 | Low-Low | 0.5892 | 0.0250 | 0.1206 |
+| RIVERVALE | 650.0000 | 21.0000 | Low-Low | 0.5836 | 0.0260 | 0.1206 |
+| WOODGROVE | 650.0000 | 12.0000 | Low-Low | 0.5892 | 0.0260 | 0.1206 |
+| CHOA CHU KANG CENTRAL | 610.0000 | 7.0000 | Low-Low | 0.6109 | 0.0300 | 0.1338 |
+| HONG KAH | 630.0000 | 16.0000 | Low-Low | 0.5865 | 0.0300 | 0.1338 |
+| BUKIT BATOK WEST | 650.0000 | 3.0000 | Low-Low | 0.5565 | 0.0340 | 0.1409 |
+| HOUGANG EAST | 610.0000 | 7.0000 | Low-Low | 0.6157 | 0.0340 | 0.1409 |
+| YEW TEE | 650.0000 | 9.0000 | Low-Low | 0.5836 | 0.0360 | 0.1431 |
+| SENGKANG TOWN CENTRE | 650.0000 | 23.0000 | Low-Low | 0.5791 | 0.0370 | 0.1431 |
+| BUKIT BATOK CENTRAL | 650.0000 | 9.0000 | Low-Low | 0.5701 | 0.0380 | 0.1445 |
+| TECK WHYE | 650.0000 | 10.0000 | Low-Low | 0.4899 | 0.0390 | 0.1450 |
+| ANCHORVALE | 610.0000 | 17.0000 | Low-Low | 0.6205 | 0.0400 | 0.1450 |
+| KIM KEAT | 610.0000 | 5.0000 | Low-Low | 0.5687 | 0.0400 | 0.1450 |
+| KANGKAR | 650.0000 | 10.0000 | Low-Low | 0.5836 | 0.0420 | 0.1499 |
+| BOON LAY PLACE | 610.0000 | 8.0000 | Low-Low | 0.4486 | 0.0440 | 0.1524 |
 
 Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05` when confirmatory control of false discoveries is required. Results describe subzone medians, not individual-centre fee similarity.

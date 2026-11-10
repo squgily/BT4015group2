@@ -224,3 +224,5 @@ __marimo__/
 #large data files 
 
 large_data/
+# symlink to the main checkout's large_data (worktree)
+large_data
