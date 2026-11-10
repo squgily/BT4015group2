@@ -113,16 +113,6 @@ def permutation_inference(z, w, permutations, seed):
     return observed, float(global_p), global_perm, observed_local, local_p
 
 
-def benjamini_hochberg(p_values: np.ndarray) -> np.ndarray:
-    order    = np.argsort(p_values)
-    ranked   = p_values[order]
-    adjusted = ranked * len(ranked) / np.arange(1, len(ranked) + 1)
-    adjusted = np.minimum.accumulate(adjusted[::-1])[::-1]
-    result   = np.empty_like(adjusted)
-    result[order] = np.minimum(adjusted, 1.0)
-    return result
-
-
 # ── Geometry / plotting helpers ───────────────────────────────────────────────
 
 def feature_patches(gdf: gpd.GeoDataFrame, value_lookup: dict, missing=np.nan):
@@ -327,7 +317,6 @@ def main():
         z, weights, PERMUTATIONS, SEED
     )
     expected_i = -1.0 / (len(z) - 1)
-    local_q    = benjamini_hochberg(local_p)
 
     raw_clusters = np.where(
         (z >= 0) & (lag >= 0), "High-High",
@@ -338,18 +327,16 @@ def main():
     area_df["spatial_lag"]          = lag
     area_df["local_moran_i"]        = local_i
     area_df["local_permutation_p"]  = local_p
-    area_df["local_fdr_q"]          = local_q
     area_df["lisa_quadrant"]        = raw_clusters
     area_df["lisa_cluster_p05"]     = np.where(local_p < 0.05, raw_clusters, "Not significant")
-    area_df["lisa_cluster_fdr05"]   = np.where(local_q < 0.05, raw_clusters, "Not significant")
     area_df["neighbour_count"]      = binary.sum(axis=1).astype(int)
 
     # ── Save CSVs ─────────────────────────────────────────────────────────────
     out_cols = [
         "SUBZONE_N", "PLN_AREA_N", VARIABLE,
         "standardised_density", "spatial_lag", "local_moran_i",
-        "local_permutation_p", "local_fdr_q",
-        "lisa_quadrant", "lisa_cluster_p05", "lisa_cluster_fdr05", "neighbour_count",
+        "local_permutation_p",
+        "lisa_quadrant", "lisa_cluster_p05", "neighbour_count",
     ]
     area_df[out_cols].to_csv(OUT_DIR / "subzone_child_moran.csv", index=False)
     pd.DataFrame({
@@ -398,7 +385,7 @@ def main():
     sig = area_df.loc[
         area_df["local_permutation_p"] < 0.05,
         ["SUBZONE_N", "PLN_AREA_N", VARIABLE, "lisa_cluster_p05",
-         "local_moran_i", "local_permutation_p", "local_fdr_q"],
+         "local_moran_i", "local_permutation_p"],
     ].sort_values(["lisa_cluster_p05", "local_permutation_p"])
 
     summary = f"""# Spatial autocorrelation of child population density (ages 0-6) by subzone
@@ -410,7 +397,7 @@ def main():
 - Spatial unit: 2019 subzones restricted to {len(area_df)} HDB subzones (has_hdb == True).
 - Spatial weights: symmetric {K}-nearest-neighbour graph on EPSG:3414 centroids, row-standardised.
 - Inference: {PERMUTATIONS:,} random permutations, seed {SEED}.
-  Local p-values use conditional randomisation; Benjamini-Hochberg FDR q-values also reported.
+  Local p-values use conditional randomisation (raw pseudo-p, consistent with team convention).
 
 ## Global Moran's I
 
@@ -425,8 +412,7 @@ and the result is **{decision} at the 5% level**.
 
 {sig.to_string(index=False) if len(sig) else "No subzone is locally significant at raw p < 0.05."}
 
-Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05`
-for confirmatory inference.
+Note: local results involve multiple comparisons. Significance assessed by raw permutation pseudo-p < 0.05.
 """
     (OUT_DIR / "analysis_summary.md").write_text(summary, encoding="utf-8")
 
