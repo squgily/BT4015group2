@@ -7,8 +7,8 @@ uniform point symbols overlaid on the density surface.
 
 Method
 ------
-Block centroids are weighted by child_0_6 (= child_0_4 + 0.40 * child_5_9, flat-40%
-approximation; visually equivalent to the data-driven per-subzone share for a smoothed map),
+Block centroids are weighted by child_0_6 (= child_0_4 + share_5_6 * child_5_9, where
+share_5_6 is the per-subzone age-5–6 fraction from hdb_access_children.csv; fallback 0.40),
 binned onto a 100 m grid, then convolved with a Gaussian kernel (sigma = BW_M / 100 cells).
 Subzone boundaries are drawn at low opacity as geographic reference.
 
@@ -16,7 +16,8 @@ Outputs
   figures/child_centre_kde_map.png
 
 Inputs
-  output/hdb_blocks_children_final.gpkg   block polygons + child_0_4, child_5_9 (EPSG:3414)
+  output/hdb_blocks_children_final.gpkg   block polygons + geometry (EPSG:3414)
+  output/hdb_access_children.csv          child_0_6 per block using per-subzone share_5_6
   output/childcare_centres_2026.gpkg      centre points, layer "centres" (EPSG:3414)
   data/MasterPlanSubZones_2019.geojson    subzone boundaries
 
@@ -33,6 +34,7 @@ import matplotlib.patches as mpatches
 from matplotlib.path import Path as MplPath
 from matplotlib.patches import PathPatch
 import numpy as np
+import pandas as pd
 import geopandas as gpd
 from scipy.ndimage import gaussian_filter
 
@@ -44,7 +46,6 @@ FIGS.mkdir(exist_ok=True)
 # ── Tuneable parameters ────────────────────────────────────────────────────────
 GRID_RES     = 100     # grid cell size in metres
 BW_M         = 800    # Gaussian smoothing bandwidth (sigma) in metres
-FLAT_SHARE   = 0.40   # fraction of 5–9 band counted as 5–6
 MIN_FRAC     = 0.002  # cells below this fraction of peak are set to NaN (transparent)
 
 CENTRE_COLOUR  = "#2166ac"
@@ -79,7 +80,9 @@ def main():
     print("Loading HDB blocks...")
     blk = gpd.read_file(OUT / "hdb_blocks_children_final.gpkg", layer="hdb_blocks_children")
     # CRS is already EPSG:3414 (metres)
-    blk["child_0_6"] = blk["child_0_4"] + FLAT_SHARE * blk["child_5_9"]
+    # Read per-subzone child_0_6 from access table (uses share_5_6, not flat 40%)
+    access = pd.read_csv(OUT / "hdb_access_children.csv", usecols=["join_key", "child_0_6"])
+    blk = blk.merge(access, on="join_key", how="left")
     blk = blk[blk["child_0_6"].fillna(0) > 0].copy()
     print(f"  {len(blk):,} residential blocks with children > 0")
 
