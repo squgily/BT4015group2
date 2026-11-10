@@ -420,12 +420,12 @@ def draw_global_moran_cluster_map(
 
 
 CLUSTER_COLORS = {
-    "Not significant": "#d9d9d9",
-    "High-High": "#d7191c",
-    "Low-Low": "#2c7bb6",
-    "High-Low": "#fdae61",
-    "Low-High": "#abd9e9",
-    "No data": "#f7f7f7",
+    "Not significant": "#D9D9D9",
+    "High-High": "#D7191C",
+    "Low-Low": "#2C7BB6",
+    "High-Low": "#FDAE61",
+    "Low-High": "#ABD9E9",
+    "No data": "#F7F7F7",
 }
 
 
@@ -535,7 +535,7 @@ def draw_moran_scatter(
 
 
 def draw_permutation(ax, permutations, observed_i, expected_i, p_value):
-    ax.hist(permutations, bins=30, color="#8da0cb", edgecolor="white")
+    ax.hist(permutations, bins=30, color="#4C78A8", edgecolor="white")
     ax.axvline(observed_i, color="#d7191c", linewidth=2, label=f"Observed I = {observed_i:.3f}")
     ax.axvline(expected_i, color="black", linestyle="--", linewidth=1.2, label=f"Expected I = {expected_i:.3f}")
     ax.set_xlabel("Moran's I under permutation")

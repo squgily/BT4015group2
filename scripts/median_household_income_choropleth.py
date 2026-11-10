@@ -111,12 +111,20 @@ def plot_choropleth(boundaries_geojson: Path, median_df: pd.DataFrame, output_pn
 
     band_order = dict(zip((label for _, label in INCOME_BANDS), range(len(INCOME_BANDS))))
     used_ranges = sorted(median_df["median_income_range"].unique(), key=band_order.get)
-    # Use one sequential hue: lighter blue indicates a lower median income
-    # range and darker blue indicates a higher median income range.
+    # Use a fixed band-based scale rather than stretching the palette across
+    # only the ranges present in this dataset. Shift every displayed range
+    # three bands lighter, so $3,000-$3,999 uses the below-$1,000 shade and
+    # each higher range follows the same offset.
     colour_scale = plt.colormaps["Blues"]
-    colour_values = np.linspace(0.32, 0.92, len(used_ranges))
+    numeric_band_labels = [
+        label for column, label in INCOME_BANDS if column != "NoEmployedPerson"
+    ]
+    base_colour_values = np.linspace(0.32, 0.92, len(numeric_band_labels))
+    band_index = {label: index for index, label in enumerate(numeric_band_labels)}
+    shade_offset = 3
     colour_by_range = {
-        label: colour_scale(value) for label, value in zip(used_ranges, colour_values)
+        label: colour_scale(base_colour_values[max(0, band_index[label] - shade_offset)])
+        for label in used_ranges
     }
     range_by_area = dict(zip(median_df["join_name"], median_df["median_income_range"]))
 
@@ -214,7 +222,7 @@ def main() -> None:
     median_df = calculate_median_ranges(args.income_csv)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     output_csv = args.output_dir / "planning_area_median_household_income_range.csv"
-    output_png = args.output_dir / "median_household_income_choropleth.png"
+    output_png = args.output_dir / "median_income_choropleth.png"
     median_df.to_csv(output_csv, index=False)
     plot_choropleth(args.boundaries, median_df, output_png)
     print(f"Wrote {output_csv}")
