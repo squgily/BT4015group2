@@ -401,10 +401,12 @@ def draw_global_moran_cluster_map(
     add_planning_area_boundaries(ax, subzones)
     ax.autoscale_view()
     set_map_style(ax)
-    ax.set_title(
-        f"Global Moran Clusters by {spatial_unit_label}",
-        fontweight="bold",
+    title = (
+        "LISA Clusters by Planning Area"
+        if spatial_unit_label == "Planning Area"
+        else f"Global Moran Clusters by {spatial_unit_label}"
     )
+    ax.set_title(title, fontweight="bold")
     order = ["High-High", "Low-Low", "High-Low", "Low-High"]
     counts = area_df["lisa_quadrant"].value_counts().to_dict()
     ax.legend(
@@ -439,8 +441,12 @@ def draw_lisa_map(ax, subzones, area_df, spatial_unit_label=None):
     add_planning_area_boundaries(ax, subzones)
     ax.autoscale_view()
     set_map_style(ax)
-    title_suffix = f" by {spatial_unit_label}" if spatial_unit_label else ""
-    ax.set_title(f"Local Moran (LISA) Clusters{title_suffix}", fontweight="bold")
+    if spatial_unit_label == "Planning Area":
+        title = "Statistically Significant LISA Clusters by Planning Area"
+    else:
+        title_suffix = f" by {spatial_unit_label}" if spatial_unit_label else ""
+        title = f"Local Moran (LISA) Clusters{title_suffix}"
+    ax.set_title(title, fontweight="bold")
     order = ["High-High", "Low-Low", "High-Low", "Low-High", "Not significant"]
     counts = area_df["lisa_cluster_p05"].value_counts().to_dict()
     ax.legend(
