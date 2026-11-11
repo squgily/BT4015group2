@@ -51,5 +51,5 @@ CHOA CHU KANG CENTRAL CHOA CHU KANG             461.496869         Low-High     
         LORONG AH SOO       HOUGANG             420.425973          Low-Low       0.477164                0.039     0.250731
            KAKI BUKIT         BEDOK             462.105616          Low-Low       0.440171                0.046     0.263172
 
-Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05`
+Note: local results involve multiple comparisons. Slides use raw pseudo-p < 0.05 (`lisa_cluster_p05`); report uses FDR q < 0.05 (`lisa_cluster_fdr05`)
 for confirmatory inference.
