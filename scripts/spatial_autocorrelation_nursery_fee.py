@@ -12,7 +12,7 @@ Outputs (under the spatial-unit-specific output directory):
   - global_moran_scatterplot.png
   - global_moran_permutation.png
   - local_moran_lisa_map.png
-  - global_moran_clusters_lisa_side_by_side.png
+  - global_moran_clusters_lisa_side_by_side.png (subzone analysis only)
   - spatial_autocorrelation_overview.png
 """
 
@@ -401,10 +401,12 @@ def draw_global_moran_cluster_map(
     add_planning_area_boundaries(ax, subzones)
     ax.autoscale_view()
     set_map_style(ax)
-    ax.set_title(
-        f"Global Moran Clusters by {spatial_unit_label}",
-        fontweight="bold",
+    title = (
+        "LISA Clusters by Planning Area"
+        if spatial_unit_label == "Planning Area"
+        else f"Global Moran Clusters by {spatial_unit_label}"
     )
+    ax.set_title(title, fontweight="bold")
     order = ["High-High", "Low-Low", "High-Low", "Low-High"]
     counts = area_df["lisa_quadrant"].value_counts().to_dict()
     ax.legend(
@@ -420,12 +422,12 @@ def draw_global_moran_cluster_map(
 
 
 CLUSTER_COLORS = {
-    "Not significant": "#d9d9d9",
-    "High-High": "#d7191c",
-    "Low-Low": "#2c7bb6",
-    "High-Low": "#fdae61",
-    "Low-High": "#abd9e9",
-    "No data": "#f7f7f7",
+    "Not significant": "#D9D9D9",
+    "High-High": "#D7191C",
+    "Low-Low": "#2C7BB6",
+    "High-Low": "#FDAE61",
+    "Low-High": "#ABD9E9",
+    "No data": "#F7F7F7",
 }
 
 
@@ -439,8 +441,12 @@ def draw_lisa_map(ax, subzones, area_df, spatial_unit_label=None):
     add_planning_area_boundaries(ax, subzones)
     ax.autoscale_view()
     set_map_style(ax)
-    title_suffix = f" by {spatial_unit_label}" if spatial_unit_label else ""
-    ax.set_title(f"Local Moran (LISA) Clusters{title_suffix}", fontweight="bold")
+    if spatial_unit_label == "Planning Area":
+        title = "Statistically Significant LISA Clusters by Planning Area"
+    else:
+        title_suffix = f" by {spatial_unit_label}" if spatial_unit_label else ""
+        title = f"Local Moran (LISA) Clusters{title_suffix}"
+    ax.set_title(title, fontweight="bold")
     order = ["High-High", "Low-Low", "High-Low", "Low-High", "Not significant"]
     counts = area_df["lisa_cluster_p05"].value_counts().to_dict()
     ax.legend(
@@ -535,7 +541,7 @@ def draw_moran_scatter(
 
 
 def draw_permutation(ax, permutations, observed_i, expected_i, p_value):
-    ax.hist(permutations, bins=30, color="#8da0cb", edgecolor="white")
+    ax.hist(permutations, bins=30, color="#4C78A8", edgecolor="white")
     ax.axvline(observed_i, color="#d7191c", linewidth=2, label=f"Observed I = {observed_i:.3f}")
     ax.axvline(expected_i, color="black", linestyle="--", linewidth=1.2, label=f"Expected I = {expected_i:.3f}")
     ax.set_xlabel("Moran's I under permutation")
@@ -725,16 +731,23 @@ def main():
         args.output_dir / "global_moran_scatterplot.png",
     )
     save_individual_plot(lambda ax: draw_permutation(ax, global_perm, observed_i, expected_i, global_p), args.output_dir / "global_moran_permutation.png")
-    save_individual_plot(lambda ax: draw_lisa_map(ax, subzones, area_df, unit_label), args.output_dir / "local_moran_lisa_map.png")
-    save_global_lisa_comparison(
-        args.output_dir / "global_moran_clusters_lisa_side_by_side.png",
-        subzones,
-        area_df,
-        observed_i,
-        expected_i,
-        global_p,
-        unit_label,
+    save_individual_plot(
+        lambda ax: draw_lisa_map(ax, subzones, area_df, unit_label),
+        args.output_dir / "local_moran_lisa_map.png",
     )
+    # Planning-area maps are presentation outputs in their own right, so keep
+    # them as two separate figures. Retain the comparison figure for the more
+    # granular subzone analysis where it remains useful.
+    if args.spatial_unit == "subzone":
+        save_global_lisa_comparison(
+            args.output_dir / "global_moran_clusters_lisa_side_by_side.png",
+            subzones,
+            area_df,
+            observed_i,
+            expected_i,
+            global_p,
+            unit_label,
+        )
 
     if not args.skip_overview:
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))

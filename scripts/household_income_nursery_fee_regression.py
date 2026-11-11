@@ -133,18 +133,6 @@ def rank_values(values: np.ndarray) -> np.ndarray:
     return pd.Series(values).rank(method="average").to_numpy(dtype=float)
 
 
-def theil_sen_fit(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
-    """Return the median pairwise slope and its median-residual intercept."""
-    slopes = []
-    for left in range(len(x)):
-        for right in range(left + 1, len(x)):
-            if x[right] != x[left]:
-                slopes.append((y[right] - y[left]) / (x[right] - x[left]))
-    slope = float(np.median(slopes))
-    intercept = float(np.median(y - slope * x))
-    return intercept, slope
-
-
 def permutation_p_values(
     x: np.ndarray, y: np.ndarray, permutations: int, seed: int
 ) -> tuple[float, float, float, float]:
@@ -187,16 +175,12 @@ def plot_scatter(
     model: dict[str, np.ndarray | float],
     boot_intercept: np.ndarray,
     boot_slope: np.ndarray,
-    theil_sen: tuple[float, float],
-    pearson: float,
-    pearson_p: float,
     output_path: Path,
 ) -> None:
     x = data["estimated_median_income_sgd"].to_numpy() / 1_000.0
     y = data["median_fee_sgd"].to_numpy()
     x_grid = np.linspace(max(0, x.min() - 0.5), x.max() + 0.5, 240)
     regression = float(model["intercept"]) + float(model["slope"]) * x_grid
-    robust_regression = theil_sen[0] + theil_sen[1] * x_grid
     boot_prediction = boot_intercept[:, None] + boot_slope[:, None] * x_grid[None, :]
     lower, upper = np.percentile(boot_prediction, [2.5, 97.5], axis=0)
 
@@ -204,14 +188,6 @@ def plot_scatter(
     fig, ax = plt.subplots(figsize=(11, 7.2))
     ax.fill_between(x_grid, lower, upper, color="#86B6D8", alpha=0.32, linewidth=0)
     ax.plot(x_grid, regression, color="#B23A2B", linewidth=2.2, label="OLS regression")
-    ax.plot(
-        x_grid,
-        robust_regression,
-        color="#555555",
-        linewidth=1.8,
-        linestyle="--",
-        label="Theil-Sen robust sensitivity",
-    )
     ax.scatter(
         x,
         y,
@@ -235,18 +211,6 @@ def plot_scatter(
             ha="right" if offset[0] < 0 else "left",
         )
 
-    ax.text(
-        0.025,
-        0.965,
-        f"n = {len(data)} planning areas\n"
-        f"Fee change per SGD 1,000 income = SGD {float(model['slope']):,.1f}\n"
-        f"R² = {float(model['r_squared']):.3f}\n"
-        f"Pearson r = {pearson:.3f} (p = {pearson_p:.4f})",
-        transform=ax.transAxes,
-        va="top",
-        fontsize=10,
-        bbox={"boxstyle": "round,pad=0.45", "facecolor": "white", "edgecolor": "#BBBBBB", "alpha": 0.94},
-    )
     ax.set_title(
         "Median Household Income and Nursery Fees by Planning Area",
         fontsize=16,
@@ -313,7 +277,6 @@ def write_summary(
     midpoint_model: dict[str, np.ndarray | float],
     model_without_top_influence: dict[str, np.ndarray | float],
     top_influence_name: str,
-    theil_sen: tuple[float, float],
     pearson: float,
     pearson_p: float,
     spearman: float,
@@ -354,12 +317,11 @@ def write_summary(
 - Spearman rank correlation: **rho = {spearman:.3f}**, two-sided permutation **p = {spearman_p:.4f}**.
 - Residual standard error: **${float(model['rmse']):,.1f}**.
 - Using income-band midpoints instead of interpolation gives a slope of **${float(midpoint_model['slope']):,.1f} per $1,000** and **R-squared = {float(midpoint_model['r_squared']):.3f}**.
-- The robust Theil-Sen sensitivity slope is **${theil_sen[1]:,.1f} per $1,000**.
 - Removing the most influential area ({top_influence_name}) gives a slope of **${float(model_without_top_influence['slope']):,.1f} per $1,000** and **R-squared = {float(model_without_top_influence['r_squared']):.3f}**.
 
 ## Interpretation
 
-The observed relationship is **{direction}** and is **{evidence} at the 5% level** under the permutation test. Planning areas with higher median household income generally have higher median nursery fees. However, the modest Spearman correlation and the much flatter robust slope show that the pattern is not a smooth increase across all areas: most middle-income planning areas cluster around $610-$650, while a small group of affluent areas have much higher fees. The association is descriptive, not causal: provider type, subsidies, programme characteristics, commercial rents, and the local mix of centres may affect fees. Nursery fees are spatially autocorrelated, so ordinary regression uncertainty should be interpreted cautiously.
+The observed relationship is **{direction}** and is **{evidence} at the 5% level** under the permutation test. Planning areas with higher median household income generally have higher median nursery fees. However, the modest Spearman correlation shows that the pattern is not a smooth increase across all areas: most middle-income planning areas cluster around $610-$650, while a small group of affluent areas have much higher fees. The association is descriptive, not causal: provider type, subsidies, programme characteristics, commercial rents, and the local mix of centres may affect fees. Nursery fees are spatially autocorrelated, so ordinary regression uncertainty should be interpreted cautiously.
 
 ## Influence and coverage
 
@@ -408,7 +370,6 @@ def main() -> None:
 
     model = ols_fit(income_thousands, fees)
     midpoint_model = ols_fit(midpoint_thousands, fees)
-    theil_sen = theil_sen_fit(income_thousands, fees)
     top_influence_index = int(np.argmax(np.asarray(model["cooks_distance"])))
     keep = np.arange(len(data)) != top_influence_index
     model_without_top_influence = ols_fit(income_thousands[keep], fees[keep])
@@ -440,7 +401,6 @@ def main() -> None:
         ("spearman_permutation_p_two_sided", spearman_p),
         ("midpoint_sensitivity_slope", midpoint_model["slope"]),
         ("midpoint_sensitivity_r_squared", midpoint_model["r_squared"]),
-        ("theil_sen_robust_slope", theil_sen[1]),
         ("slope_excluding_most_influential_area", model_without_top_influence["slope"]),
         ("r_squared_excluding_most_influential_area", model_without_top_influence["r_squared"]),
     ]
@@ -453,9 +413,6 @@ def main() -> None:
         model,
         boot_intercept,
         boot_slope,
-        theil_sen,
-        pearson,
-        pearson_p,
         args.output_dir / "income_nursery_fee_regression.png",
     )
     print(f"Matched planning areas: {len(data)}")

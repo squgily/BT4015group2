@@ -425,8 +425,7 @@ and the result is **{decision} at the 5% level**.
 
 {sig.to_string(index=False) if len(sig) else "No subzone is locally significant at raw p < 0.05."}
 
-Note: local results involve multiple comparisons. Prefer `local_fdr_q` / `lisa_cluster_fdr05`
-for confirmatory inference.
+Note: local results involve multiple comparisons. Slides use raw pseudo-p < 0.05 (`lisa_cluster_p05`); report uses FDR q < 0.05 (`lisa_cluster_fdr05`).
 """
     (OUT_DIR / "analysis_summary.md").write_text(summary, encoding="utf-8")
 
