@@ -113,7 +113,7 @@ timetable data, roughly a week of work, and was judged out of scope.
 | Date | Decision | Where |
 |---|---|---|
 | 2026-10-28 | Canonical centre layer is the Oct-2026 ECDA listing, geocoded; the 2021 GeoJSON is stale (292 active centres missing, 541 closed). Superseded by the 2026-11-01 entry above: Jessie's layer is canonical. | README "Walking access" |
-| 2026-10-26 | Walk matrix origins are individual HDB **blocks**, not clusters (prof). Clusters kept for mapping only. | `docs/work_split_2026-10-26.md` |
+| 2026-10-26 | Walk matrix origins are individual HDB **blocks**, not clusters (prof). Clusters kept for mapping only. | consultation notes (not in repo); implemented in `1_06` |
 | 2026-10-22 | Child allocation to blocks by **flat type** (Jessie), not floor-area bands (Kenneth). | `output/hdb_unresolved_blocks_handling.md` |
 | 2026-10-18 | HDB clustering: complete-linkage, 300 m max diameter, per subzone. | `docs/clustering_decision.md` |
 | proposal | Centre capacity is not used as a variable. | proposal |
