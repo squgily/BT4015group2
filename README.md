@@ -18,6 +18,7 @@ the team took along the way, with dates and evidence, are in [docs/decisions.md]
 | [1_Data_Preparation](1_Data_Preparation/README.md) | Join HDB blocks to their attributes, allocate children to blocks, build the 2026 centre layer with fees, route walking times with OSRM, integrate everything per block and per subzone. | 8 |
 | [2_ESDA](2_ESDA/README.md) | Describe the data spatially: income and fee maps, child-density KDE, Ripley's K, walking-access maps and isochrones, centres against children. | 5 |
 | [3_Hypothesis_Testing](3_Hypothesis_Testing/README.md) | Test the hypotheses: fee clustering (Moran's I, LISA), income–fee regression and GWR, child-density clustering, walking access by SES, the proposal's H-c, the supply-pressure index with LISA and sensitivities, and the planned-centre impact. | 8 |
+| [project_story.ipynb](project_story.ipynb) | **Start here.** The project in one notebook: the presentation's arc with every headline number read live from `output/` and the saved figures shown in sequence; runs in seconds. | 1 |
 | [run_all.ipynb](run_all.ipynb) | Driver: executes the 21 stage 1–3 notebooks in order and prints a status table. | 1 |
 | [src/bt4015](src/bt4015/) | Small shared helpers imported by the notebooks: paths, spatial weights, OSRM table calls, 2SFCA, fee join, Moran utilities, regression helpers. | — |
 
@@ -32,6 +33,8 @@ Shared folders at the root:
 | `docs/` | Decision log, clustering experiment write-up, notebook style guide. |
 
 ## Run order
+
+**To read:** open [project_story.ipynb](project_story.ipynb); it walks through the whole analysis from the saved outputs.
 
 **One-click:** open [run_all.ipynb](run_all.ipynb) at the root and run it. It executes the 21 notebooks of
 stages 1–3 in order, each in a fresh kernel, refreshes their outputs in place and prints a pass/fail table
