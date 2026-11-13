@@ -4,6 +4,24 @@ Settled methodological decisions, so they are not re-opened by accident. Newest 
 says what was decided, the evidence, and who confirmed it. Open questions stay in the project
 CLAUDE.md "Open decisions" list until they land here.
 
+## 2026-11-13 — Fee outputs use Daryl's `_2026` folder names; subzone fee Moran inline only; Theil-Sen dropped
+
+Daryl's 11 Nov update on `main` ("Update Plots", PRs #20/#21, then "Remove files", PR #22) re-ran his four
+fee scripts on the canonical 2026 layer, wrote the results to `output/*_2026/` folders, deleted the 2021
+output folders and the subzone-level fee outputs, dropped the Theil-Sen line from the OLS figure and the
+R-squared text box from the GWR local-lines figure, and fixed the income choropleth colour scale (fixed
+scale over all bands, shifted three bands lighter). His re-run reproduces the notebook numbers
+(planning-area I 0.511, p 0.001; OLS slope 113.9, R² 0.626; GWR 14 neighbours, R² 0.861, Monte Carlo
+p 0.345); local p-values differ in the third decimal from permutation seeds.
+
+The notebooks follow him. 3_01 writes to `spatial_autocorrelation_nursery_fee_planning_area_2026/`, 3_02 to
+`household_income_nursery_fee_regression_2026/`, 3_03 to `gwr_income_nursery_fee_planning_area_2026/`, and
+2_01 to `median_household_income_planning_area/` (his script's default; 1_07 reads the median-band CSV
+there). The subzone-level fee Moran (I 0.446) stays in 3_01 as an inline sensitivity with no files
+written. Theil-Sen is out: with most planning areas at the S$650 anchor fee the median pairwise slope is
+exactly 0, which read as "no relationship" next to a significant OLS; Cook's distance keeps the influence
+check.
+
 ## 2026-11-02 — LISA on the pressure index: minimum 100 children 0–6 per subzone, tested 0–200
 
 **Decision.** The local Moran's I on log pressure is run on HDB subzones with at least 100 children
