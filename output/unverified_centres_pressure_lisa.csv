@@ -1,0 +1,4 @@
+layer,centres,n_subzones,median_pressure,morans_I,p_sim,n_HH,HH_subzones,spearman_vs_base,top10_overlap,subzones_changed,largest_change_pct,largest_change_subzone,HH_lost,HH_gained
+base,1796,140,106.0,0.176,0.0018,10,Brickworks; Garden; Hong Kah North; Matilda; Park; Plantation; Punggol Town Centre; Waterway East; Woodgrove; Yuhua West,1.0,10,0,0.0,,,
+plausible,1806,140,106.0,0.182,0.0014,10,Brickworks; Garden; Hong Kah North; Matilda; Park; Plantation; Punggol Town Centre; Waterway East; Woodgrove; Yuhua West,0.9993,10,13,-14.8,Tampines North,,
+upper_bound,1815,140,105.4,0.179,0.0016,10,Brickworks; Garden; Hong Kah North; Matilda; North Coast; Park; Plantation; Punggol Town Centre; Waterway East; Yuhua West,0.9987,10,30,-15.1,Sembawang East,Woodgrove,North Coast
